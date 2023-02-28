@@ -1,0 +1,40 @@
+= document site
+:example-caption!:
+:toc: right
+
+this is a next js project to stroe and share my notes,
+
+== note location
+All note inside *#/doc#* dir
+
+== note format
+All note formats are *#adoc#*
+
+.for example: the full path of a note
+====
+/doc/javascript/es6/promise.adoc
+====
+
+== route design
+* `/`: shows all first-level heading for all note with a link.
+
+* `/book/...`: shows the content and table of content.
+
++
+.for example: a book about nodeJs's file system flags
+====
+route: /book/nodeJs/FileSystemFlags
+
+use the file system path as it route
+====
+
+== dynamic route
+/book/.../.../...
+
+after book it's all route parameter
+
+.for example
+====
+route: /book/javascript/es6/promise.adoc
+parameter: /javascript/es6/promise.adoc
+====

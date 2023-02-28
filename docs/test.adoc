@@ -1,0 +1,38 @@
+= title1
+:toc: right
+:source-highlighter: highlight.js
+:highlightjs-theme: xcode
+
+sdfdsafddsadf
+
+== title2
+```js
+if ([]) {
+  console.log("[] is truthy");
+}
+if ([] == false) {
+  console.log("[] == false");
+}
+
+class createUserDto{
+
+}
+
+const a=new createUserDto();
+// [] is truthy
+// [] == false
+```
+
+== title3
+.this is example
+```python
+a=[1,2,3,4]
+
+```
+
+=== title3-sub
+to do something
+[NOTE]
+====
+note it
+====
