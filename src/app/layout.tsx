@@ -1,4 +1,5 @@
-import "@/styles/globals.css";
+import "./globals.css";
+import HomeLogoLink from "@/ui/HomeLogoLink";
 
 export default function RootLayout({
   children,
@@ -21,7 +22,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <header className=" h-4 bg-slate-600">search bar here</header>
+        <header className="h-16 bg-slate-900 flex items-center">
+          <HomeLogoLink />
+        </header>
         <main>{children}</main>
       </body>
     </html>
