@@ -20,8 +20,12 @@ export default function ThemeToggleButton() {
   const [theme, setTheme] = useState<ThemeType>("Light");
   const [ulOpen, setUlOpen] = useState<boolean>(false);
 
-  function handleButtonClick() {
-    setUlOpen((f) => !f);
+  function handleButtonFocus() {
+    setUlOpen(true);
+  }
+
+  function handleButtonBlur() {
+    setUlOpen(false);
   }
 
   function chooseTheme(theme: ThemeType) {
@@ -58,7 +62,11 @@ export default function ThemeToggleButton() {
   }, [theme]);
 
   return (
-    <button className=" relative" onClick={handleButtonClick}>
+    <button
+      className=" relative focus:ring-2 rounded-sm ring-blue-400"
+      onFocus={handleButtonFocus}
+      onBlur={handleButtonBlur}
+    >
       {theme === "Light" ? (
         <LightSvg />
       ) : theme === "Dark" ? (
@@ -70,7 +78,7 @@ export default function ThemeToggleButton() {
       )}
       <ul
         className={clsx(
-          "w-36 overflow-hidden absolute top-8 right-0 ring-1 ring-slate-200 bg-white rounded-lg",
+          "w-36 overflow-hidden absolute top-8 right-0 ring-1 ring-slate-200 dark:ring-slate-600 bg-white rounded-lg dark:bg-slate-800",
           {
             hidden: !ulOpen,
           }
@@ -85,8 +93,11 @@ export default function ThemeToggleButton() {
                 chooseTheme(item.label);
               }}
               className={clsx(
-                "px-2 py-1 flex items-center hover:bg-slate-200 text-slate-700 dark:text-slate-200",
-                { "text-blue-400": focus }
+                "px-2 py-1 flex items-center hover:bg-slate-200 hover:dark:bg-slate-600",
+                {
+                  "text-blue-400": focus,
+                  "text-slate-700 dark:text-slate-200": !focus,
+                }
               )}
             >
               {item.element(focus)}
