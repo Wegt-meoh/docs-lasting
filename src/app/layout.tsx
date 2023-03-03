@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@/styles/globals.css";
 import HomeLogoLink from "@/ui/HomeLogoLink";
 
 export default function RootLayout({
@@ -21,12 +21,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"
         />
       </head>
-      <body>
-        <header className="h-16 bg-slate-900 flex items-center">
-          <HomeLogoLink />
-        </header>
-        <main>{children}</main>
-      </body>
+      <body className=" bg-white dark:bg-slate-900">{children}</body>
     </html>
   );
 }
