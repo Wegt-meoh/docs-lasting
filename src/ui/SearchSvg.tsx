@@ -1,7 +1,7 @@
 export default function SearchSvg() {
   return (
     <svg
-      className="ml-3 w-5 h-5 overflow-hidden "
+      className="w-5 h-5 overflow-hidden "
       aria-hidden="true"
       data-icon="search"
       role="img"

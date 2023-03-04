@@ -78,7 +78,7 @@ export default function ThemeToggleButton() {
       )}
       <ul
         className={clsx(
-          "w-36 overflow-hidden absolute top-8 right-0 ring-1 ring-slate-200 dark:ring-slate-600 bg-white rounded-lg dark:bg-slate-800",
+          "w-36 overflow-hidden absolute z-10 top-8 right-0 ring-1 ring-slate-200 dark:ring-slate-600 bg-white rounded-lg dark:bg-slate-800",
           {
             hidden: !ulOpen,
           }

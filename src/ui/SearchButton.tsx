@@ -1,11 +1,16 @@
 "use client";
 
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import DocSearchModal from "./DocSearchModal";
 import SearchSvg from "./SearchSvg";
 
-export default function SearchButton() {
+export default function SearchButton({
+  size = "middle",
+}: {
+  size?: "small" | "middle" | "large";
+}) {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -34,13 +39,29 @@ export default function SearchButton() {
         onClick={() => {
           setModalOpen(true);
         }}
-        className=" hover:ring-slate-400 hover:dark:bg-slate-600 outline-none overflow-hidden w-52 rounded-lg h-9 bg-white ring-1 ring-slate-200 dark:ring-slate-900 dark:bg-slate-800 flex items-center"
+        className={clsx(
+          `outline-none overflow-hidden text-slate-400 flex items-center justify-center`,
+          {
+            "hover:ring-slate-300 rounded-lg bg-white ring-1 ring-slate-200 dark:ring-transparent dark:bg-slate-800 hover:dark:bg-slate-700":
+              size !== "small",
+            "w-52 h-9 pl-3": size === "middle",
+            "bg-transparent hover:text-slate-600": size === "small",
+            "w-72 h-12 pl-4": size === "large",
+          }
+        )}
       >
         <SearchSvg />
-        <span className="ml-2 text-sm">Quick search...</span>
-        <span className="ml-auto mr-3 pl-3 flex-none text-xs font-semibold">
-          ⌘K
-        </span>
+        {size !== "small" && (
+          <>
+            <span className="ml-2 text-sm">Quick search...</span>
+            <span className="ml-auto mr-3 pl-4 flex-none text-xs font-semibold">
+              {navigator.userAgent.toLowerCase().indexOf("mac os") >= 0
+                ? "⌘ "
+                : "Ctrl "}
+              K
+            </span>
+          </>
+        )}
       </button>
       {modalOpen &&
         createPortal(
