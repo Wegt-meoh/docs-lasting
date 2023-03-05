@@ -5,7 +5,7 @@ import React from "react";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <header className="h-16 relative text-slate-400 dark:ring-slate-800">
+      <header className="h-16 relative text-slate-400 dark:ring-slate-800 ring-1 ring-slate-200">
         <div className=" absolute flex items-center left-6 h-full">
           <HomeLogoLink />
         </div>
