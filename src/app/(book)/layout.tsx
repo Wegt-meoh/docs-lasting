@@ -16,7 +16,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <LinkGroup />
         </div>
       </header>
-      <h1>book layout</h1>
       <main>{children}</main>
     </div>
   );
