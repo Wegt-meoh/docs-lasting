@@ -63,6 +63,7 @@ export default function ThemeToggleButton() {
 
   return (
     <button
+      type="button"
       className=" relative focus:ring-2 rounded-sm ring-blue-400"
       onFocus={handleButtonFocus}
       onBlur={handleButtonBlur}

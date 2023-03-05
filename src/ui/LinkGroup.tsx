@@ -6,7 +6,8 @@ export default function LinkGroup() {
     <div className=" flex items-center gap-2 pl-2 border-l-slate-300">
       <ThemeToggleButton />
       <a
-        href="https://www.lastingcoder.xyz"
+        title="github link"
+        href="https://github.com/Wegt-meoh/docs-lasting"
         className="text-inherit block hover:text-slate-600"
       >
         <GithubSvg />

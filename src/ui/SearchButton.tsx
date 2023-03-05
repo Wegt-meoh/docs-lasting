@@ -36,6 +36,7 @@ export default function SearchButton({
   return (
     <>
       <button
+        type="button"
         onClick={() => {
           setModalOpen(true);
         }}
