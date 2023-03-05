@@ -12,6 +12,7 @@ export default function SearchButton({
   size?: "small" | "middle" | "large";
 }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [commandText, setCommandText] = useState<"⌘ " | "Ctrl ">("Ctrl ");
 
   useEffect(() => {
     document.addEventListener("keydown", (ev) => {
@@ -31,6 +32,12 @@ export default function SearchButton({
         }
       });
     };
+  }, []);
+
+  useEffect(() => {
+    const res =
+      navigator.userAgent.toLowerCase().indexOf("mac os") >= 0 ? "⌘ " : "Ctrl ";
+    setCommandText(res);
   }, []);
 
   return (
@@ -56,10 +63,7 @@ export default function SearchButton({
           <>
             <span className="ml-2 text-sm">Quick search...</span>
             <span className="ml-auto mr-3 pl-4 flex-none text-xs font-semibold">
-              {navigator.userAgent.toLowerCase().indexOf("mac os") >= 0
-                ? "⌘ "
-                : "Ctrl "}
-              K
+              {commandText}K
             </span>
           </>
         )}
