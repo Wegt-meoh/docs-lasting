@@ -1,0 +1,673 @@
+= Regular Expressions chapter
+:source-highlighter: highlight.js
+:highlightjs-theme: xcode
+:toc: right
+
+== Literal notation and constructor
+There are two ways to create a RegExp object: a literal notation and a constructor.
+
+====
+```js
+const re = /ab+c/i; // literal notation
+// OR
+const re = new RegExp('ab+c', 'i'); // constructor with string pattern as first argument
+// OR
+const re = new RegExp(/ab+c/, 'i'); // constructor with regular expression literal as first argument
+```
+====
+
+== Flags in constructor
+*RegExp.prototype.flags* is an `accessor property` whose set accessor function is `undefined`. Its get accessor function performs the following steps when called:
+
+1. Let *R* be the *this* value.
+2. If *R* is not an *Object*, throw a *TypeError* exception.
+3. Let *codeUnits* be a new *empty List*.
+4. Let *hasIndices* be *ToBoolean*(? Get(R, "hasIndices")).
+5. If *hasIndices* is *true*, append the code unit *0x0064* (LATIN SMALL LETTER D) to *codeUnits*.
+6. Let *global* be *ToBoolean*(? Get(R, "global")).
+7. If *global* is *true*, append the code unit *0x0067* (LATIN SMALL LETTER G) to *codeUnits*.
+8. Let *ignoreCase* be *ToBoolean*(? Get(R, "ignoreCase")).
+9. If *ignoreCase* is *true*, append the code unit 0x0069 (LATIN SMALL LETTER I) to *codeUnits*.
+10. Let *multiline* be *ToBoolean*(? Get(R, "multiline")).
+11. If multiline is *true*, append the code unit 0x006D (LATIN SMALL LETTER M) to *codeUnits*.
+12. Let *dotAll* be *ToBoolean*(? Get(R, "dotAll")).
+13. If dotAll is *true*, append the code unit 0x0073 (LATIN SMALL LETTER S) to *codeUnits*.
+14. Let *unicode* be ToBoolean(? Get(R, "unicode")).
+15. If unicode is *true*, append the code unit 0x0075 (LATIN SMALL LETTER U) to *codeUnits*.
+16. Let *sticky* be ToBoolean(? Get(R, "sticky")).
+17. If sticky is *true*, append the code unit 0x0079 (LATIN SMALL LETTER Y) to *codeUnits*.
+18. Return the String value whose code units are the elements in the List *codeUnits*. If *codeUnits* has no elements, the empty String is returned.
+
+====
+details see https://tc39.es/ecma262/multipage/text-processing.html#sec-regexpexec[regular expression exec]
+====
+
+
+== Special handling for regexes
+[NOTE]
+====
+Whether something is a "regex" can be duck-typed. It doesn't have to be a RegExp!
+====
+
+Some built-in methods would treat regexes specially. They decide whether x is a regex through multiple steps:
+
+. `x` must be an object(not a primitive)
+
+. If `x[Symbol.match]` is not undefined, check if it's `truthy`.
+
+. Otherwise, if `x[Symbol.match]` is `undefined`, check if `x` had been created with the `RegExp` constructor. (This step should rarely happen, since if `x` is a `RegExp` object that have not been tampered with, it should have a `Symbol.match` property.)
+
+Note that in most cases, it would go through the Symbol.match check, which means:
+
+* An actual `RegExp` object whose `Symbol.match` property's value is `falsy` but not `undefined` (even with everything else intact, like `exec` and `@@replace`) can be used as if it's not a regex.
+
+* A `non-RegExp` object with a `Symbol.match` property will be treated as if it's a regex.
+
+This choice was made because `@@match` is the most indicative property that something is intended to be used for matching. (exec could also be used, but because it's not a symbol property, there would be too many false positives.) The places that treat regexes specially include:
+
+* `String.prototype.endsWith()`, `startsWith()`, and `includes()` throw a `TypeError` if the first argument is a regex.
+
+* `String.prototype.matchAll()` and `replaceAll()` check whether the `global` flag is set if the first argument is a regex before invoking its `@@matchAll` or `@@replace` method.
+
+* The `RegExp()` constructor directly returns the `pattern` argument only if pattern is a regex (among a few other conditions). If pattern is a regex, it would also interrogate ``pattern``'s `source` and `flags` properties instead of coercing `pattern` to a string.
+
+For example, String.prototype.endsWith() would coerce all inputs to strings, but it would throw if the argument is a regex, because it's only designed to match strings, and using a regex is likely a developer mistake.
+
+====
+```js
+"foobar".endsWith({ toString: () => "bar" }); // true
+"foobar".endsWith(/bar/); // TypeError: First argument to String.prototype.endsWith must not be a regular expression
+```
+====
+
+You can get around the check by setting `@@match` to a `falsy` value that's not `undefined`. This would mean that the regex cannot be used for `String.prototype.match()` (since without `@@match`, `match()` would construct a new `RegExp` object with the two enclosing slashes added by re.toString()), but it can be used for virtually everything else.
+
+====
+```js
+const re = /bar/g;
+re[Symbol.match] = false;
+"/bar/g".endsWith(re); // true
+re.exec("bar"); // [ 'bar', index: 0, input: 'bar', groups: undefined ]
+"bar & bar".replace(re, "foo"); // 'foo & foo'
+```
+====
+
+== Character classes
+
+Character classes distinguish kinds of characters such as, for example, distinguishing between letters and digits.
+
+[cols="1,4"]
+|===
+|Characters|Meaning
+
+|[xyz]
+
+[a-c]
+|A character class. Matches any one of the enclosed characters. You can specify a range of characters by using a hyphen, but if the hyphen appears as the first or last character enclosed in the square brackets, it is taken as a literal hyphen to be included in the character class as a normal character.
+
+For example, [abcd] is the same as [a-d]. They match the "b" in "brisket", and the "c" in "chop".
+
+For example, [abcd-] and [-abcd] match the "b" in "brisket", the "c" in "chop", and the "-" (hyphen) in "non-profit".
+
+For example, [\w-] is the same as [A-Za-z0-9_-]. They both match the "b" in "brisket", the "c" in "chop", and the "n" in "non-profit".
+
+|[^xyz]
+
+[^a-c]
+|A negated or complemented character class. That is, it matches anything that is not enclosed in the brackets. You can specify a range of characters by using a hyphen, but if the hyphen appears as the first character after the ^ or the last character enclosed in the square brackets, it is taken as a literal hyphen to be included in the character class as a normal character. For example, [^abc] is the same as [^a-c]. They initially match "o" in "bacon" and "h" in "chop".
+
+|.
+|Has one of the following meanings:
+
+* Matches any single character except line terminators: \n, \r, \u2028 or \u2029. For example, /.y/ matches "my" and "ay", but not "yes", in "yes make my day", as there is no character before "y" in "yes".
+
+* Inside a character class, the dot loses its special meaning and matches a literal dot.
+
+Note that the m multiline flag doesn't change the dot behavior. So to match a pattern across multiple lines, the character class [^] can be used — it will match any character including newlines.
+
+The s "dotAll" flag allows the dot to also match line terminators.
+
+|\d
+|Matches any digit (Arabic numeral). Equivalent to [0-9]. For example, /\d/ or /[0-9]/ matches "2" in "B2 is the suite number".
+
+|\D
+|Matches any character that is not a digit (Arabic numeral). Equivalent to [^0-9]. For example, /\D/ or /[^0-9]/ matches "B" in "B2 is the suite number".
+
+|\w
+|Matches any alphanumeric character from the basic Latin alphabet, including the underscore. Equivalent to [A-Za-z0-9_]. For example, /\w/ matches "a" in "apple", "5" in "$5.28", "3" in "3D" and "m" in "Émanuel".
+
+|\W
+|Matches any character that is not a word character from the basic Latin alphabet. Equivalent to [^A-Za-z0-9_]. For example, /\W/ or /[^A-Za-z0-9_]/ matches "%" in "50%" and "É" in "Émanuel".
+
+|\s
+|Matches a single white space character, including space, tab, form feed, line feed, and other Unicode spaces. Equivalent to [\f\n\r\t\v\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]. For example, /\s\w*/ matches " bar" in "foo bar".
+
+|\S
+|Matches a single character other than white space. Equivalent to [^\f\n\r\t\v\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]. For example, /\S\w*/ matches "foo" in "foo bar".
+
+|\t
+|Matches a horizontal tab.
+
+|\r
+|Matches a carriage return.
+
+|\n
+|Matches a linefeed.
+
+|\v
+|Matches a vertical tab.
+
+|\f
+|Matches a form-feed.
+
+|\b
+|Matches a backspace. If you're looking for the word-boundary character (\b), see Assertions.
+
+|\0
+|Matches a NUL character. Do not follow this with another digit.
+
+|\cX
+|Matches a control character using caret notation, where "X" is a letter from A–Z (corresponding to codepoints U+0001–U+001A). For example, /\cM\cJ/ matches "\r\n".
+
+|\xhh
+|Matches the character with the code hh (two hexadecimal digits).
+
+|\uhhhh
+|Matches a UTF-16 code-unit with the value hhhh (four hexadecimal digits).
+
+|\u{hhhh} or \u{hhhhh}
+|(Only when the u flag is set.) Matches the character with the Unicode value U+hhhh or U+hhhhh (hexadecimal digits).
+
+|\p{UnicodeProperty}, \P{UnicodeProperty}
+|Matches a character based on its Unicode character properties (to match just, for example, emoji characters, or Japanese katakana characters, or Chinese/Japanese Han/Kanji characters, etc.).
+
+|\
+|Indicates that the following character should be treated specially, or "escaped". It behaves one of two ways.
+
+* For characters that are usually treated literally, indicates that the next character is special and not to be interpreted literally. For example, /b/ matches the character "b". By placing a backslash in front of "b", that is by using /\b/, the character becomes special to mean match a word boundary.
+
+* For characters that are usually treated specially, indicates that the next character is not special and should be interpreted literally. For example, "\*" is a special character that means 0 or more occurrences of the preceding character should be matched; for example, /a*/ means match 0 or more "a"s. To match * literally, precede it with a backslash; for example, /a\*/ matches "a*".
+
+|x\|y
+|Disjunction: Matches either "x" or "y". Each component, separated by a pipe (\|), is called an alternative. For example, /green\|red/ matches "green" in "green apple" and "red" in "red apple".
+
+|===
+
+== Assertions
+
+Assertions include boundaries, which indicate the beginnings and endings of lines and words, and other patterns indicating in some way that a match is possible (including look-ahead, look-behind, and conditional expressions).
+
+.demo
+====
+```js
+include::res/demo.js[]
+```
+====
+
+=== Boundary-type assertions
+[cols="1,4"]
+|===
+|Charachers|Meaning
+
+|^
+|Matches the beginning of input. If the multiline flag is set to true, also matches immediately after a line break character. For example, /^A/ does not match the "A" in "an A", but does match the first "A" in "An A".
+
+|$
+|Matches the end of input. If the multiline flag is set to true, also matches immediately before a line break character. For example, /t$/ does not match the "t" in "eater", but does match it in "eat".
+
+|\b
+|Matches a word boundary. This is the position where a word character is not followed or preceded by another word-character, such as between a letter and a space. Note that a matched word boundary is not included in the match. In other words, the length of a matched word boundary is zero.
+
+Examples:
+
+* /\bm/ matches the "m" in "moon".
+
+* /oo\b/ does not match the "oo" in "moon", because "oo" is followed by "n" which is a word character.
+
+* /oon\b/ matches the "oon" in "moon", because "oon" is the end of the string, thus not followed by a word character.
+
+* /\w\b\w/ will never match anything, because a word character can never be followed by both a non-word and a word character.
+
+|\B
+|Matches a non-word boundary. This is a position where the previous and next character are of the same type: Either both must be words, or both must be non-words, for example between two letters or between two spaces. The beginning and end of a string are considered non-words. Same as the matched word boundary, the matched non-word boundary is also not included in the match. For example, /\Bon/ matches "on" in "at noon", and /ye\B/ matches "ye" in "possibly yesterday".
+
+|===
+
+[NOTE]
+====
+`^` has a different meaning when it appears at the start of a `character class`.
+====
+
+=== Other assertions
+[NOTE]
+====
+The `?` character may also be used as a quantifier.
+====
+
+|===
+|Characters|Meaning
+
+|x(?=y)
+|Lookahead assertion: Matches "x" only if "x" is followed by "y". For example, /Jack(?=Sprat)/ matches "Jack" only if it is followed by "Sprat".
+/Jack(?=Sprat\|Frost)/ matches "Jack" only if it is followed by "Sprat" or "Frost". However, neither "Sprat" nor "Frost" is part of the match results.
+
+|x(?!y)
+|Lookahead assertion: Matches "x" only if "x" is followed by "y". For example, /Jack(?=Sprat)/ matches "Jack" only if it is followed by "Sprat".
+/Jack(?=Sprat\|Frost)/ matches "Jack" only if it is followed by "Sprat" or "Frost". However, neither "Sprat" nor "Frost" is part of the match results.
+
+|(?<=y)x
+|Lookbehind assertion: Matches "x" only if "x" is preceded by "y". For example, /(?<=Jack)Sprat/ matches "Sprat" only if it is preceded by "Jack". /(?<=Jack\|Tom)Sprat/ matches "Sprat" only if it is preceded by "Jack" or "Tom". However, neither "Jack" nor "Tom" is part of the match results.
+
+|(?<!y)x
+|Negative lookbehind assertion: Matches "x" only if "x" is not preceded by "y". For example, /(?<!-)\d+/ matches a number only if it is not preceded by a minus sign. /(?<!-)\d+/.exec('3') matches "3". /(?<!-)\d+/.exec('-3') match is not found because the number is preceded by the minus sign. 
+
+|===
+
+.General boundary-type overview example
+====
+```js
+include::res/ex.js[]
+```
+====
+
+.Matching the beginning of input using a ^ control character
+====
+_Use ^ for matching at the beginning of input. In this example, we can get the fruits that start with 'A' by a /^A/ regex. For selecting appropriate fruits we can use the filter method with an arrow function._
+```js
+include::res/ex1.js[]
+```
+
+
+_In the second example ^ is used both for matching at the beginning of input and for creating negated or complemented character class when used within character classes._
+```js
+include::res/ex2.js[]
+```
+====
+
+.Matching a word boundary
+====
+```js
+include::res/ex3.js[]
+```
+====
+
+.Lookahead assertion
+====
+```js
+include::res/ex4.js[]
+```
+====
+
+.Basic negative lookahead assertion
+====
+For example, /\d+(?!\.)/ matches a number only if it is not followed by a decimal point. /\d+(?!\.)/.exec('3.141') matches "141" but not "3.
+```js
+console.log(/\d+(?!\.)/g.exec('3.141')); // [ '141', index: 2, input: '3.141' ]
+```
+====
+
+.Different meaning of '?!' combination usage in assertions and character classes
+====
+The ?! combination has different meanings in assertions like /x(?!y)/ and character classes like [^?!].
+
+```js
+include::res/ex5.js[]
+```
+====
+
+.Lookbehind assertion
+====
+```js
+const oranges = ['ripe orange A ', 'green orange B', 'ripe orange C'];
+
+const ripeOranges = oranges.filter((fruit) => fruit.match(/(?<=ripe )orange/));
+console.log(ripeOranges); // [ 'ripe orange A ', 'ripe orange C' ]
+```
+====
+
+== Groups and backReferences
+
+Groups group multiple patterns as a whole, and capturing groups provide extra submatch information when using a regular expression pattern to match against a string. Backreferences refer to a previously captured group in the same regular expression.
+
+.demo
+====
+```js
+include::res/ex6.js[]
+```
+====
+
+[cols="1,4"]
+|===
+|Characters|Meaning
+
+|(x)
+|Capturing group: Matches x and remembers the match. For example, /(foo)/ matches and remembers "foo" in "foo bar".
+
+A regular expression may have multiple capturing groups. In results, matches to capturing groups typically in an array whose members are in the same order as the left parentheses in the capturing group. This is usually just the order of the capturing groups themselves. This becomes important when capturing groups are nested. Matches are accessed using the index of the result's elements ([1], …, [n]) or from the predefined RegExp object's properties ($1, …, $9).
+
+Capturing groups have a performance penalty. If you don't need the matched substring to be recalled, prefer non-capturing parentheses (see below).
+
+String.prototype.match() won't return groups if the /.../g flag is set. However, you can still use String.prototype.matchAll() to get all matches.
+
+|(?<Name>x)
+|Named capturing group: Matches "x" and stores it on the groups property of the returned matches under the name specified by <Name>. The angle brackets (< and >) are required for group name.
+
+For example, to extract the United States area code from a phone number, we could use /\((?<area>\d\d\d)\)/. The resulting number would appear under matches.groups.area.
+
+|(?:x)
+|Non-capturing group: Matches "x" but does not remember the match. The matched substring cannot be recalled from the resulting array's elements ([1], …, [n]) or from the predefined RegExp object's properties ($1, …, $9).
+
+|k<Name>
+|A back reference to the last substring matching the Named capture group specified by <Name>.
+
+For example, /(?<title>\w+), yes \k<title>/ matches "Sir, yes Sir" in "Do you copy? Sir, yes Sir!".
+
+|===
+
+.Using groups
+====
+```js
+const personList = `First_Name: John, Last_Name: Doe
+First_Name: Jane, Last_Name: Smith`;
+
+const regexpNames =  /First_Name: (\w+), Last_Name: (\w+)/mg;
+for (const match of personList.matchAll(regexpNames)) {
+  console.log(`Hello ${match[1]} ${match[2]}`);
+}
+```
+====
+
+.Using named groups
+====
+```js
+const personList = `First_Name: John, Last_Name: Doe
+First_Name: Jane, Last_Name: Smith`;
+
+const regexpNames =  /First_Name: (?<firstname>\w+), Last_Name: (?<lastname>\w+)/mg;
+for (const match of personList.matchAll(regexpNames)) {
+  console.log(`Hello ${match.groups.firstname} ${match.groups.lastname}`);
+}
+// running results:
+// Hello John Doe
+// Hello Jane Smith
+```
+====
+
+.Using groups and back references
+====
+```js
+const quote = `Single quote "'" and double quote '"'`;
+const regexpQuotes = /(['"]).*?\1/g;
+for (const match of quote.matchAll(regexpQuotes)) {
+  console.log(match[0]);
+}
+// "'"
+// '"'
+```
+====
+
+.Using groups and match indices
+====
+By providing the `d` flag, the indices of each capturing group is returned. This is especially useful if you are correlating each matched group with the original text — for example, to provide compiler diagnostics.
+
+```js
+include::res/ex7.js[]
+```
+====
+
+== Quantifiers
+Quantifiers indicate numbers of characters or expressions to match.
+
+.demo
+====
+```js
+include::res/ex8.js[]
+```
+====
+
+[NOTE]
+====
+Note: In the following, item refers not only to singular characters, but also includes character classes, Unicode property escapes, groups and backreferences.
+====
+
+[cols="1,4"]
+|===
+|Characters|Meaning
+
+|x*
+|Matches the preceding item "x" 0 or more times. For example, /bo*/ matches "boooo" in "A ghost booooed" and "b" in "A bird warbled", but nothing in "A goat grunted".
+
+|x+
+|Matches the preceding item "x" 1 or more times. Equivalent to {1,}. For example, /a+/ matches the "a" in "candy" and all the "a"'s in "caaaaaaandy".
+
+|x?
+|Matches the preceding item "x" 0 or 1 times. For example, /e?le?/ matches the "el" in "angel" and the "le" in "angle."
+
+If used immediately after any of the quantifiers *, +, ?, or {}, makes the quantifier non-greedy (matching the minimum number of times), as opposed to the default, which is greedy (matching the maximum number of times).
+
+|x{n}
+|Where "n" is a positive integer, matches exactly "n" occurrences of the preceding item "x". For example, /a{2}/ doesn't match the "a" in "candy", but it matches all of the "a"'s in "caandy", and the first two "a"'s in "caaandy".
+
+|x{n,}
+|Where "n" is a positive integer, matches at least "n" occurrences of the preceding item "x". For example, /a{2,}/ doesn't match the "a" in "candy", but matches all of the a's in "caandy" and in "caaaaaaandy".
+
+|x{n,m}
+|Where "n" is 0 or a positive integer, "m" is a positive integer, and m > n, matches at least "n" and at most "m" occurrences of the preceding item "x". For example, /a{1,3}/ matches nothing in "cndy", the "a" in "candy", the two "a"'s in "caandy", and the first three "a"'s in "caaaaaaandy". Notice that when matching "caaaaaaandy", the match is "aaa", even though the original string had more "a"s in it.
+
+|x*?
+
+x+?
+
+x??
+
+x{n}?
+
+x{n,}?
+
+x{n,m}?
+|By default quantifiers like * and + are "greedy", meaning that they try to match as much of the string as possible. The ? character after the quantifier makes the quantifier "non-greedy": meaning that it will stop as soon as it finds a match. For example, given a string like "some <foo> <bar> new </bar> </foo> thing":
+
+* /<.*>/ will match "<foo> <bar> new </bar> </foo>"
+
+* /<.*?>/ will match "<foo>"
+
+|===
+
+.Repeated patterm
+====
+```js
+const wordEndingWithAs = /\w+a+\b/;
+const delicateMessage = "This is Spartaaaaaaa";
+
+console.table(delicateMessage.match(wordEndingWithAs)); 
+// [ "Spartaaaaaaa" ]
+```
+====
+
+.Counting characters
+====
+```js
+const singleLetterWord = /\b\w\b/g;
+const notSoLongWord = /\b\w{2,6}\b/g;
+const loooongWord = /\b\w{13,}\b/g;
+
+const sentence = "Why do I have to learn multiplication table?";
+
+console.table(sentence.match(singleLetterWord)); 
+// ["I"]
+console.table(sentence.match(notSoLongWord));    
+// [ "Why", "do", "have", "to", "learn", "table" ]
+console.table(sentence.match(loooongWord));      
+// ["multiplication"]
+```
+====
+
+.Optional character
+====
+```js
+const britishText = "He asked his neighbour a favour.";
+const americanText = "He asked his neighbor a favor.";
+
+const regexpEnding = /\w+ou?r/g;
+// \w+ One or several letters
+// o   followed by an "o",
+// u?  optionally followed by a "u"
+// r   followed by an "r"
+
+console.table(britishText.match(regexpEnding));
+// ["neighbour", "favour"]
+
+console.table(americanText.match(regexpEnding));
+// ["neighbor", "favor"]
+```
+====
+
+.Greedy versus non-greedy
+====
+```js
+const text = "I must be getting somewhere near the center of the earth.";
+const greedyRegexp = /[\w ]+/;
+// [\w ]      a letter of the latin alphabet or a whitespace
+//      +     one or several times
+
+console.log(text.match(greedyRegexp)[0]);
+// "I must be getting somewhere near the center of the earth"
+// almost all of the text matches (leaves out the dot character)
+
+const nonGreedyRegexp = /[\w ]+?/; // Notice the question mark
+console.log(text.match(nonGreedyRegexp));
+// "I"
+// The match is the smallest one possible
+```
+====
+
+== Unicode Property Escapes
+Unicode property escapes Regular Expressions allows for matching characters based on their Unicode properties. A character is described by several properties which are either binary ("boolean-like") or non-binary. For instance, unicode property escapes can be used to match emojis, punctuations, letters (even letters from specific languages or scripts), etc.
+
+.demo
+====
+```js
+const sentence = 'A ticket to 大阪 costs ¥2000 👌.';
+
+const regexpEmojiPresentation = /\p{Emoji_Presentation}/gu;
+console.log(sentence.match(regexpEmojiPresentation));
+// expected output: Array ["👌"]
+
+const regexpNonLatin = /\P{Script_Extensions=Latin}+/gu;
+console.log(sentence.match(regexpNonLatin));
+// expected output: Array [" ", " ", " 大阪 ", " ¥2000 👌."]
+
+const regexpCurrencyOrPunctuation = /\p{Sc}|\p{P}/gu;
+console.log(sentence.match(regexpCurrencyOrPunctuation));
+// expected output: Array ["¥", "."]
+```
+====
+
+[NOTE]
+====
+For Unicode property escapes to work, a regular expression _**must use the u flag**_ which indicates a string must be considered as a series of Unicode code points. See also RegExp.prototype.unicode.
+====
+
+[NOTE]
+====
+Some Unicode properties encompasses many more characters than some character classes (such as \w which matches only latin letters, a to z) but the latter is better supported among browsers (as of January 2020).
+====
+
+=== Syntax
+
+----
+// Non-binary values
+\p{UnicodePropertyValue}
+\p{UnicodePropertyName=UnicodePropertyValue}
+
+// Binary and non-binary values
+\p{UnicodeBinaryPropertyName}
+
+// Negation: \P is negated \p
+\P{UnicodePropertyValue}
+\P{UnicodeBinaryPropertyName}
+----
+
+* UnicodeBinaryPropertyName
++
+----
+The name of a binary property. E.g.: ASCII, Alpha, Math, Diacritic, Emoji, Hex_Digit, Math, White_space, etc. See Unicode Data PropList.txt for more info.
+----
+
+* UnicodePropertyName
++
+----
+The name of a non-binary property:
+----
+
+* UnicodePropertyValue
++
+----
+One of the tokens listed in the Values section, below. Many values have aliases or shorthand (e.g. the value Decimal_Number for the General_Category property may be written Nd, digit, or Decimal_Number). For most values, the UnicodePropertyName part and equals sign may be omitted. If a UnicodePropertyName is specified, the value must correspond to the property type given.
+----
+
+=== General categories
+====
+General categories are used to classify Unicode characters and subcategories are available to define a more precise categorization. It is possible to use both short or long forms in Unicode property escapes.
+
+They can be used to match letters, numbers, symbols, punctuations, spaces, etc. For a more exhaustive list of general categories, please refer to the Unicode specification.
+
+```js
+include::res/ex9.js[]
+```
+====
+
+=== Scripts and script extensions
+====
+Some languages use different scripts for their writing system. For instance, English and Spanish are written using the Latin script while Arabic and Russian are written with other scripts (respectively Arabic and Cyrillic). The `Script` and `Script_Extensions` Unicode properties allow regular expression to match characters according to the script they are mainly used with (Script) or according to the set of scripts they belong to (Script_Extensions).
+
+For example, A belongs to the Latin script and ε to the Greek script.
+
+```js
+const mixedCharacters = "aεЛ";
+
+// Using the canonical "long" name of the script
+mixedCharacters.match(/\p{Script=Latin}/u); // a
+
+// Using a short alias for the script
+mixedCharacters.match(/\p{Script=Greek}/u); // ε
+
+// Using the short name Sc for the Script property
+mixedCharacters.match(/\p{Sc=Cyrillic}/u); // Л
+```
+
+If a character is used in a limited set of scripts, the Script property will only match for the "predominant" used script. If we want to match characters based on a "non-predominant" script, we could use the Script_Extensions property (Scx for short).
+
+```js
+// ٢ is the digit 2 in Arabic-Indic notation
+// while it is predominantly written within the Arabic script
+// it can also be written in the Thaana script
+
+"٢".match(/\p{Script=Thaana}/u);
+// null as Thaana is not the predominant script
+
+"٢".match(/\p{Script_Extensions=Thaana}/u);
+// ["٢", index: 0, input: "٢", groups: undefined]
+```
+====
+
+=== Unicode property escapes vs. character classes
+With JavaScript regular expressions, it is also possible to use character classes and especially \w or \d to match letters or digits. However, such forms only match characters from the Latin script (in other words, a to z and A to Z for \w and 0 to 9 for \d). As shown in this example, it might be a bit clumsy to work with non Latin texts.
+
+Unicode property escapes categories encompass much more characters and \p{Letter} or \p{Number} will work for any script.
+
+====
+```js
+// Trying to use ranges to avoid \w limitations:
+
+const nonEnglishText = "Приключения Алисы в Стране чудес";
+const regexpBMPWord = /([\u0000-\u0019\u0021-\uFFFF])+/gu;
+// BMP goes through U+0000 to U+FFFF but space is U+0020
+
+console.table(nonEnglishText.match(regexpBMPWord));
+
+// Using Unicode property escapes instead
+const regexpUPE = /\p{L}+/gu;
+console.table(nonEnglishText.match(regexpUPE));
+```
+====

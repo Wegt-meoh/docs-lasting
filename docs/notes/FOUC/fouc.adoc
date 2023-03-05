@@ -1,0 +1,52 @@
+= FOUC
+:toc: right
+:highlightjs-theme: a11y-light
+:source-highlighter: highlight.js
+this artical introduces what is FOUC, and how to solve it.
+
+== what is FOUC
+
+I am sure you have seen web pages load with *unstyled content*, and then it might be a few seconds (or minutes) before you see what may or may not be the page’s intended look and feel.In web design, this aberration is called the unintended Flash of Unstyled Content (FOUC).
+
+.Figure1
+image:./w.gif[example1] 
+
+== How to avoid FOUC
+
+=== First technique
+
+Hiding all or part of the web page until all styles and JavaScript are finished by applying a class name “js” as the selector that hides all content within a container that has an id=”fouc”. The “fouc” element is unhidden using a JavaScript getElementById function setting the display value to “block” level.
+
+.Example
+image:./w2.gif[example]
+
+=== Second technique
+
+you've likely seen code like this:
+====
+```html
+<body>
+    <script>document.body.className+='js';</script>
+```
+====
+
+No good script in the body block rendering so we can do better:
+====
+```html
+<head>
+    <script>document.body.className+='js';</script>
+```
+====
+
+*I prefer to write unique css for the no-javascript user*. I don’t want to be writing .js in front of every selector for my basic accordion/carousel/etc widgets. It’s terribly tedious. I really just want a .no-js hook.
+
+====
+```html
+<html class="no-js">
+<head>
+  <script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
+```
+====
+
+== Solution
+Let classes to be all set on the HTML element right when the BODY content starts loading in.

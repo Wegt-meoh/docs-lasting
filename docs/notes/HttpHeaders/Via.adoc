@@ -1,0 +1,38 @@
+= Via
+:toc: right
+
+The *Via* general header is added by proxies, both forward and reverse, and can appear in the request or response headers. It is used for tracking message forwards, avoiding request loops, and identifying the protocol capabilities of senders along the request/response chain.
+
+|===
+|Header type|Request header, Response header
+
+a|link:./ForbiddenHeaderName.adoc[Forbidden header name]
+|yes
+
+|===
+
+== Syntax
+ Via: [ <protocol-name> "/" ] <protocol-version> <host> [ ":" <port> ]
+ Via: [ <protocol-name> "/" ] <protocol-version> <pseudonym>
+
+== Directives
+* <protocol-name>
++
+ Optional. The name of the protocol used, such as "HTTP".
+
+* <protocol-version>
++
+ The version of the protocol used, such as "1.1".
+
+* <host> and <port>
++
+ Public proxy URL and port.
+
+* <pseudonym>
++
+ Name/alias of an internal proxy.
+
+== Example
+ Via: 1.1 vegur
+ Via: HTTP/1.1 GWA
+ Via: 1.0 fred, 1.1 p.example.net

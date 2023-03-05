@@ -1,0 +1,79 @@
+= falsy
+:source-highlighter: highlight.js
+:highlightjs-theme: xcode
+
+|===
+|Value|Description
+
+|false
+|the keyword of false
+
+|0
+|The Number zero (so, also 0.0, etc., and 0x0).
+
+|-0
+|The Number negative zero (so, also -0.0, etc., and -0x0).
+
+|0n
+|The BigInt zero (so, also 0x0n). Note that there is no BigInt negative zero — the negation of 0n is 0n.
+
+|"", '', ````
+|Empty string value
+
+|null
+|null — the absence of any value.
+
+|undefined
+|undefined — the primitive value.
+
+|NaN
+|NaN — not a number.
+
+|document.all
+|Objects are falsy if and only if they have the [[IsHTMLDDA]] internal slot. That slot only exists in document.all and cannot be set using JavaScript.
+
+|===
+
+.example
+====
+[source,js]
+----
+if (false) {
+  // Not reachable
+}
+
+if (null) {
+  // Not reachable
+}
+
+if (undefined) {
+  // Not reachable
+}
+
+if (0) {
+  // Not reachable
+}
+
+if (-0) {
+  // Not reachable
+}
+
+if (0n) {
+  // Not reachable
+}
+
+if (NaN) {
+  // Not reachable
+}
+
+if ("") {
+  // Not reachable
+}
+
+console.log(false && "dog");
+// ↪ false
+
+console.log(0 && "dog");
+// ↪ 0
+----
+====

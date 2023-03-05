@@ -1,0 +1,13 @@
+= Http caching
+
+== Overview
+The HTTP cache stores a response associated with a request and reuses the stored response for subsequent requests.
+
+There are several advantages to reusability. First, since there is no need to deliver the request to the origin server, then the closer the client and cache are, the faster the response will be. The most typical example is when the browser itself stores a cache for browser requests.
+
+Also, when a response is reusable, the origin server does not need to process the request — so it does not need to parse and route the request, restore the session based on the cookie, query the DB for results, or render the template engine. That reduces the load on the server.
+
+Proper operation of the cache is critical to the health of the system.
+
+== Types of caches
+

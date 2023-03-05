@@ -1,0 +1,496 @@
+= Resolvers
+:toc: right
+:highlightjs-theme: a11y-light
+:source-highlighter: highlight.js
+:icons: font
+:stylesheet: ./my.css
+
+this artical only cover code first,exclude schema first
+
+== Code first
+
+In the code first approach, we don't follow the typical process of creating our GraphQL schema by writing GraphQL SDL by hand. Instead, we use TypeScript decorators to generate the SDL from TypeScript class definitions. The *#@nestjs/graphql#* package reads the metadata defined through the decorators and automatically generates the schema for you.
+
+== Object types
+
+If we were using the schema first approach, we'd define such a schema with SDL like this:
+
+====
+```sdl
+type Author {
+  id: Int!
+  firstName: String
+  lastName: String
+  posts: [Post!]!
+}
+```
+====
+
+In this case, using the code first approach, we define schemas using TypeScript classes and using TypeScript decorators to annotate the fields of those classes. The equivalent of the above SDL in the code first approach is:
+
+====
+```ts
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Post } from './post';
+
+@ObjectType()
+export class Author {
+  @Field(type => Int)
+  id: number;
+
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ nullable: true })
+  lastName?: string;
+
+  @Field(type => [Post])
+  posts: Post[];
+}
+```
+====
+
+[TIP]
+====
+TypeScript's metadata reflection system has several limitations which make it impossible, for instance, to determine what properties a class consists of or recognize whether a given property is optional or required. Because of these limitations, we must either explicitly use the *#@Field()#* decorator in our schema definition classes to provide metadata about each field's GraphQL type and optionality, or use a *#CLI plugin#* to generate these for us.
+====
+
+anothor example:
+
+====
+```ts
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+
+@ObjectType()
+export class Post {
+  @Field(type => Int)
+  id: number;
+
+  @Field()
+  title: string;
+
+  @Field(type => Int, { nullable: true })
+  votes?: number;
+}
+```
+====
+
+====
+```sdl
+type Post {
+  id: Int!
+  title: String!
+  votes: Int
+}
+```
+====
+
+*The type function is required when there's the potential for ambiguity between the TypeScript type system and the GraphQL type system.* Specifically: it is *not* required for *#string#* and *#boolean#* types; it is required for *#number#* (which must be mapped to either a GraphQL *#Int#* or *#Float#*). The type function should simply return the desired GraphQL type (as shown in various examples in these chapters).
+
+The options object can have any of the following key/value pairs:
+
+* `nullable`: for specifying whether a field is nullable (in SDL, each field is non-nullable by default); #boolean#
+
+* `description`: for setting a field description; #string#
+
+* `deprecationReason`: for marking a field as deprecated; #string#
+
+For example:
+
+====
+```ts
+@Field({ description: `Book title`, deprecationReason: 'Not useful in v2 schema' })
+title: string;
+```
+====
+
+[TIP]
+====
+You can also add a description to, or deprecate, the whole object type: #@ObjectType({ description: 'Author model' })#.
+====
+
+When the field is an array, we must manually indicate the array type in the Field() decorator's type function, as shown below:
+
+====
+```ts
+@Field(type => [Post])
+posts: Post[];
+```
+====
+
+[TIP]
+====
+Using array bracket notation (#[ ]#), we can indicate the depth of the array. For example, using #\[[Int]]# would represent an integer matrix.
+====
+
+To declare that an array's items (not the array itself) are nullable, set the nullable property to 'items' as shown below:
+
+====
+```ts
+@Field(type => [Post], { nullable: 'items' })
+posts: Post[];
+```
+====
+
+[TIP]
+====
+If both the array and its items are nullable, set #nullable# to #'itemsAndList'# instead.
+====
+
+== Code first resolver
+
+At this point, we've defined the objects (type definitions) that can exist in our data graph, but clients don't yet have a way to interact with those objects. To address that, we need to create a resolver class. In the code first method, *a resolver class both defines resolver functions and generates the Query type.* This will be clear as we work through the example below:
+
+[caption=]
+.author/author.resolver.ts
+====
+```ts
+@Resolver(of => Author)
+export class AuthorsResolver {
+  constructor(
+    private authorsService: AuthorsService,
+    private postsService: PostsService,
+  ) {}
+
+  @Query(returns => Author)
+  async author(@Args('id', { type: () => Int }) id: number) {
+    return this.authorsService.findOneById(id);
+  }
+
+  @ResolveField()
+  async posts(@Parent() author: Author) {
+    const { id } = author;
+    return this.postsService.findAll({ authorId: id });
+  }
+}
+```
+====
+
+In our example, since the class includes a *#field resolver#* function (for the `posts` property of the `Author` object type), we must supply the *#@Resolver()#* decorator with a value to indicate which class is the parent type (i.e., the corresponding *#ObjectType#* class name) for all field resolvers defined within this class. As should be clear from the example, when writing a field resolver function, it's necessary to access the parent object (the object the field being resolved is a member of). In this example, we populate an author's posts array with a field resolver that calls a service which takes the author's *#id#* as an argument. Hence the need to identify the parent object in the *#@Resolver()#* decorator. Note the corresponding use of the *#@Parent()#* method parameter decorator to then extract a reference to that parent object in the field resolver.
+
+== Query type names
+
+====
+```ts
+@Query(returns => Author)
+async author(@Args('id', { type: () => Int }) id: number) {
+  return this.authorsService.findOneById(id);
+}
+```
+====
+
+This generates the following entry for the author query in our schema (the query type uses the same name as the method name):
+
+====
+```sdl
+type Query {
+  author(id: Int!): Author
+}
+```
+====
+
+Conventionally, we prefer to decouple these names; for example, we prefer to use a name like *#getAuthor()#* for our query handler method, but still use *#author#* for our query type name. The same applies to our field resolvers. We can easily do this by passing the mapping names as arguments of the *#@Query()#* and *#@ResolveField()#* decorators, as shown below:
+
+====
+```ts
+@Resolver(of => Author)
+export class AuthorsResolver {
+  constructor(
+    private authorsService: AuthorsService,
+    private postsService: PostsService,
+  ) {}
+
+  @Query(returns => Author, { name: 'author' })
+  async getAuthor(@Args('id', { type: () => Int }) id: number) {
+    return this.authorsService.findOneById(id);
+  }
+
+  @ResolveField('posts', returns => [Post])
+  async getPosts(@Parent() author: Author) {
+    const { id } = author;
+    return this.postsService.findAll({ authorId: id });
+  }
+}
+```
+====
+
+The getAuthor handler method above will result in generating the following part of the GraphQL schema in SDL:
+
+====
+```ts
+type Query {
+  author(id: Int!): Author
+}
+```
+====
+
+== Query decorator options
+
+* `name`: name of the query; a `string`
+
+* `description`: a description that will be used to generate GraphQL schema documentation (e.g., in GraphQL playground); a `string`
+
+* `deprecationReason`: sets query metadata to show the query as deprecated (e.g., in GraphQL playground); a `string`
+
+* `nullable`: whether the query can return a null data response; `boolean` or `'items'` or `'itemsAndList'`
+
+== Args decorator options
+
+Use the *#@Args()#* decorator to extract arguments from a request for use in the method handler. This works in a very similar fashion to *REST route parameter argument extraction*.
+
+Usually your *#@Args()#* decorator will be simple, and not require an object argument as seen with the *#getAuthor()#* method above. For example, if the type of an identifier is string, the following construction is sufficient, and simply plucks the named field from the inbound GraphQL request for use as a method argument.
+
+====
+```ts
+@Args('id') id: string
+```
+====
+
+In the *#getAuthor()#* case, the *#number#* type is used, which presents a challenge. The number TypeScript type doesn't give us enough information about the expected GraphQL representation (e.g., *#Int#* vs. *#Float#*). Thus we have to *explicitly* pass the type reference. We do that by passing a second argument to the *#Args()#* decorator, containing argument options, as shown below:
+
+====
+```ts
+@Query(returns => Author, { name: 'author' })
+async getAuthor(@Args('id', { type: () => Int }) id: number) {
+  return this.authorsService.findOneById(id);
+}
+```
+====
+
+The options object allows us to specify the following optional key value pairs:
+
+* `type`: a function returning the GraphQL type
+
+* `defaultValue`: a default value; `any`
+
+* `description`: description metadata; `string`
+
+* `deprecationReason`: to deprecate a field and provide meta data describing why; `string`
+
+* `nullable`: whether the field is nullable
+
+Query handler methods can take multiple arguments. Let's imagine that we want to fetch an author based on its *firstName* and *lastName*. In this case, we can call *#@Args#* twice:
+
+====
+```ts
+getAuthor(
+  @Args('firstName', { nullable: true }) firstName?: string,
+  @Args('lastName', { defaultValue: '' }) lastName?: string,
+) {}
+```
+====
+
+== Dedicated arguments class
+
+With inline *#@Args()#* calls, code like the example above becomes *bloated*. Instead, you can create a dedicated *#GetAuthorArgs#* arguments class and access it in the handler method as follows:
+
+====
+```ts
+@Args() args: GetAuthorArgs
+```
+====
+
+Create the *#GetAuthorArgs#* class using *#@ArgsType()#* as shown below:
+
+[caption=]
+.authors/dto/get-author.args.ts
+====
+```ts
+import { MinLength } from 'class-validator';
+import { Field, ArgsType } from '@nestjs/graphql';
+
+@ArgsType()
+class GetAuthorArgs {
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ defaultValue: '' })
+  @MinLength(3)
+  lastName: string;
+}
+```
+====
+
+[TIP]
+====
+Again, due to TypeScript's metadata reflection system limitations, it's required to either use the *#@Field#* decorator to manually indicate type and optionality, or use a *#CLI plugin#*.
+====
+
+This will result in generating the following part of the GraphQL schema in SDL:
+
+====
+```sdl
+type Query {
+  author(firstName: String, lastName: String = ''): Author
+}
+```
+====
+
+== Class inheritance
+
+[caption=]
+.Base *#@ArgsType()#* class:
+====
+```ts
+@ArgsType()
+class PaginationArgs {
+  @Field((type) => Int)
+  offset: number = 0;
+
+  @Field((type) => Int)
+  limit: number = 10;
+}
+```
+====
+
+[caption=]
+.Type specific sub-class of the base *#@ArgsType()#* class:
+
+====
+```ts
+@ArgsType()
+class GetAuthorArgs extends PaginationArgs {
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ defaultValue: '' })
+  @MinLength(3)
+  lastName: string;
+}
+```
+====
+
+The same approach can be taken with *#@ObjectType()#* objects. Define generic properties on the base class:
+
+====
+```ts
+@ObjectType()
+class Character {
+  @Field((type) => Int)
+  id: number;
+
+  @Field()
+  name: string;
+}
+```
+====
+
+Add type-specific properties on sub-classes:
+
+====
+```ts
+@ObjectType()
+class Warrior extends Character {
+  @Field()
+  level: number;
+}
+```
+====
+
+You can use inheritance with a resolver as well. You can ensure type safety by combining inheritance and TypeScript generics. For example, to create a base class with a generic *#findAll#* query, use a construction like this:
+
+====
+```ts
+function BaseResolver<T extends Type<unknown>>(classRef: T): any {
+  @Resolver({ isAbstract: true })
+  abstract class BaseResolverHost {
+    @Query((type) => [classRef], { name: `findAll${classRef.name}` })
+    async findAll(): Promise<T[]> {
+      return [];
+    }
+  }
+  return BaseResolverHost;
+}
+```
+====
+
+[NOTE]
+====
+* an explicit return type (*#any#* above) is required: otherwise TypeScript complains about the usage of a private class definition. Recommended: define an interface instead of using *#any#*.
+
+* *#Type#* is imported from the *#@nestjs/common#* package
+
+* The *#isAbstract: true#* property indicates that SDL (Schema Definition Language statements) shouldn't be generated for this class. Note, you can set this property for other types as well to suppress SDL generation.
+====
+
+Here's how you could generate a concrete sub-class of the *#BaseResolver#*:
+
+====
+```ts
+@Resolver((of) => Recipe)
+export class RecipesResolver extends BaseResolver(Recipe) {
+  constructor(private recipesService: RecipesService) {
+    super();
+  }
+}
+```
+====
+
+This construct would generated the following SDL:
+
+====
+```sdl
+type Query {
+  findAllRecipe: [Recipe!]!
+}
+```
+====
+
+== Generics
+
+We saw one use of generics above. This powerful TypeScript feature can be used to create useful abstractions. For example, here's a sample cursor-based pagination implementation based on https://graphql.org/learn/pagination/#pagination-and-edges[this documentation]:
+
+====
+```ts
+import { Field, ObjectType, Int } from '@nestjs/graphql';
+import { Type } from '@nestjs/common';
+
+interface IEdgeType<T> {
+  cursor: string;
+  node: T;
+}
+
+export interface IPaginatedType<T> {
+  edges: IEdgeType<T>[];
+  nodes: T[];
+  totalCount: number;
+  hasNextPage: boolean;
+}
+
+export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
+  @ObjectType(`${classRef.name}Edge`)
+  abstract class EdgeType {
+    @Field((type) => String)
+    cursor: string;
+
+    @Field((type) => classRef)
+    node: T;
+  }
+
+  @ObjectType({ isAbstract: true })
+  abstract class PaginatedType implements IPaginatedType<T> {
+    @Field((type) => [EdgeType], { nullable: true })
+    edges: EdgeType[];
+
+    @Field((type) => [classRef], { nullable: true })
+    nodes: T[];
+
+    @Field((type) => Int)
+    totalCount: number;
+
+    @Field()
+    hasNextPage: boolean;
+  }
+  return PaginatedType as Type<IPaginatedType<T>>;
+}
+```
+====
+
+With the above base class defined, we can now easily create specialized types that inherit this behavior. For example:
+
+====
+```ts
+@ObjectType()
+class PaginatedAuthor extends Paginated(Author) {}
+```
+====
