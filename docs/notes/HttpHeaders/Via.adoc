@@ -1,5 +1,7 @@
 = Via
 :toc: right
+:description: The *Via* general header is added by proxies, both forward and reverse, and can appear in the request or response headers. It is used for tracking message forwards, avoiding request loops, and identifying the protocol capabilities of senders along the request/response chain.
+lasting <lastingcoder@qq.com>
 
 The *Via* general header is added by proxies, both forward and reverse, and can appear in the request or response headers. It is used for tracking message forwards, avoiding request loops, and identifying the protocol capabilities of senders along the request/response chain.
 

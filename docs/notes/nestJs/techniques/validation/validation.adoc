@@ -2,6 +2,8 @@
 :toc: right
 :source-highlighter: highlight.js
 :highlightjs-theme: a11y-light
+:description: introduce validation pipe in graphQL
+lasting <lastingcoder@qq.com>
 
 == Using the built-in ValidationPipe
 

@@ -4,8 +4,10 @@
 :source-highlighter: highlight.js
 :icons: font
 :stylesheet: ./my.css
+:description: introduce resolver in graphQL
+lasting <lastingcoder@qq.com>
 
-this artical only cover code first,exclude schema first
+this artical only cover code first,exclude schema first!
 
 == Code first
 

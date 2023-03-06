@@ -1,4 +1,6 @@
 = adoc note
+:description: summary of built-in blocks
+lasting <lastingcoder@qq.com>
 
 == Summary of built-in blocks
 [cols="1,1m,1m,3,1"]

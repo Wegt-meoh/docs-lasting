@@ -1,5 +1,7 @@
 = Forwarded
 :toc: right
+:description: The *Forwarded* request header contains information that may be added by reverse proxy servers (load balancers, CDNs, and so on) that would otherwise be altered or lost when proxy servers are involved in the path of the request.
+lasting <lastingcoder@qq.com>
 
 The *Forwarded* request header contains information that may be added by reverse proxy servers (load balancers, CDNs, and so on) that would otherwise be altered or lost when proxy servers are involved in the path of the request.
 

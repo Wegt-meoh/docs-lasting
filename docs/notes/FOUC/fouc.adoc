@@ -2,6 +2,9 @@
 :toc: right
 :highlightjs-theme: a11y-light
 :source-highlighter: highlight.js
+:description: this artical introduces what is FOUC, and how to solve it.
+lasting <lastingcoder@qq.com>
+
 this artical introduces what is FOUC, and how to solve it.
 
 == what is FOUC

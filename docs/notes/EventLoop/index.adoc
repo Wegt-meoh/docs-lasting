@@ -1,6 +1,8 @@
 = Event loop
 :source-highlighter: highlight.js
 :highlightjs-theme: xcode
+:description: About explanation of javascript event loop
+lasting <lastingcoder@qq.com>
 
 About explanation of javascript event loop,Modifications have been made based on the https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/[original text]
 

@@ -1,4 +1,6 @@
 = File system flags
+:description: the file system flags in nodeJs.
+lasting <lastingcoder@qq.com>
 
 the file system flags in nodeJs.
 

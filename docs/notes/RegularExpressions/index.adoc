@@ -2,6 +2,8 @@
 :source-highlighter: highlight.js
 :highlightjs-theme: xcode
 :toc: right
+:description: regular express in javascript
+lasting <lastingcoder@qq.com>
 
 == Literal notation and constructor
 There are two ways to create a RegExp object: a literal notation and a constructor.
