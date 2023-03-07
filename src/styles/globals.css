@@ -13,3 +13,29 @@ html>body{
 html.js>body{
     opacity: 1;
 }
+
+.index_bg{
+    background-image: url('/images/homebg.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: top;
+}
+
+.dark .index_bg{
+    background-image: url('/images/homebg_dark.jpg');   
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: top;    
+}
+
+.book_bg{
+    background-image: url('/images/docbg.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.dark .book_bg{
+    background-image: url('/images/docbg_dark.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
