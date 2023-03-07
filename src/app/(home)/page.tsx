@@ -1,23 +1,50 @@
+import { BooklistDataType } from "@/types/booklist";
+import BookBlock from "@/ui/BookBlock";
 import SearchButton from "@/ui/SearchButton";
 import Link from "next/link";
 
-export default function Page() {
+async function getBooklistData() {
+  const res = await fetch(`http://localhost:3000/api/booklist`);
+  return res.json();
+}
+
+export default async function Page() {
+  const booklistData: BooklistDataType[] = await getBooklistData();
+
   return (
     <div>
-      <div className=" absolute flex flex-col items-center left-32 h-full">
+      <div className="flex flex-col items-center left-32 h-full">
         <h1 className=" text-6xl mt-24 font-bold text-slate-800 dark:text-slate-50">
           Hello I am Lasting, this is a site share my note.
         </h1>
-        <div className=" mt-12 flex gap-2">
+        <div className="mt-12">
           <Link
-            className=" dark:bg-blue-500 hover:dark:bg-blue-400 bg-slate-800 hover:bg-slate-700 text-slate-50 text-lg rounded-lg flex justify-center items-center px-4"
+            className=" dark:bg-blue-500 hover:dark:bg-blue-400 bg-slate-800 
+            hover:bg-slate-700 text-slate-50 rounded-lg px-4 py-3 mr-3 text-base float-left"
             href={"/book"}
           >
-            Get Start
+            Get started
           </Link>
           <SearchButton size="large" />
         </div>
       </div>
+      <div className=" grid grid-cols-4 gap-2 p-16 flex-wrap">
+        <BookList booklistData={booklistData} />
+      </div>
     </div>
+  );
+}
+
+function BookList({ booklistData }: { booklistData: BooklistDataType[] }) {
+  return (
+    <>
+      {booklistData.map((book) => {
+        return (
+          <div key={book.id}>
+            <BookBlock {...book} />
+          </div>
+        );
+      })}
+    </>
   );
 }

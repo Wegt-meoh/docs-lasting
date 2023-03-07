@@ -62,18 +62,27 @@ export function getAllBooksFilePath() {
 }
 
 export function getAllBooksList() {
-  const bookList: { id: string; title: string; description: string }[] = [];
-
-  getAllBooksFilePath().forEach((filePath) => {
-    const id = filePath.replace(/\.adoc$/, "");
+  return getAllBooksFilePath().map((filePath) => {
+    const id = filePath
+      .replace(new RegExp(`.adoc$`), "")
+      .replace(new RegExp(`^${postsDirectory}`), "");
     const doc = asciiDoctor.loadFile(filePath);
-
-    bookList.push({
+    return {
       id,
-      title: doc.getTitle() ?? "unresolved title",
-      description: doc.getAttribute("description", "no description..."),
-    });
-  });
 
-  return bookList;
+      title: doc.getTitle() ?? "unresolved title",
+
+      //if there is no description instead of it with it's title
+      description: doc.getAttribute(
+        "description",
+        doc.getTitle() ?? "no description..."
+      ),
+    };
+  });
+}
+
+export function getBookContentById(id: string) {
+  const fullPath = path.join(postsDirectory, id) + ".adoc";
+  const doc = asciiDoctor.loadFile(fullPath);
+  return doc.convert();
 }
