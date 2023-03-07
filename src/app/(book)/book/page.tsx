@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function Book() {
-  return <></>;
+  redirect("/book/notes/AdocNote/index");
 }

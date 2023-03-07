@@ -27,7 +27,7 @@ export default function DocSearchModal({
   return (
     <div
       className={clsx(
-        "doc-search-container w-screen h-screen backdrop-blur-sm bg-mask absolute top-0 flex justify-center z-20",
+        "w-screen h-screen backdrop-blur-sm bg-mask fixed top-0 left-0 flex justify-center z-20",
         { hidden: !modalOpen }
       )}
       onClick={handleMaskClick}

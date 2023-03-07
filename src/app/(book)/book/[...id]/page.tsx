@@ -11,5 +11,10 @@ export default async function Page({ params }: { params: { id: string[] } }) {
   const id = params.id.join("/");
   const content = await getContentById(id);
 
-  return <div className="adoc" dangerouslySetInnerHTML={{ __html: content }} />;
+  return (
+    <div
+      className="adoc min-h-screen"
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
+  );
 }

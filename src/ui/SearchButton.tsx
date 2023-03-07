@@ -40,6 +40,14 @@ export default function SearchButton({
     setCommandText(res);
   }, []);
 
+  useEffect(() => {
+    if (modalOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [modalOpen]);
+
   return (
     <>
       <button
