@@ -6,7 +6,7 @@
 lasting <lastingcoder@qq.com>
 
 mdn上的，js基本数据类型和数据结构，阅读笔记，注意本文中的某些链接是链接到另一篇本地文章的，有些一些则链接到互联网。
-image::2023-01-26T11-06%3A14-824Z.png[]
+
 == Dynamic and weak typing
 ====
 [source,js]
