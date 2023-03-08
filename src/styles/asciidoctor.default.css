@@ -1,6 +1,6 @@
 .adoc {
     color: rgba(0, 0, 0, 0.8);
-    padding: 0;
+    padding: 1rem;
     margin: 0;
     font-family: "Noto Serif", "DejaVu Serif", serif;
     line-height: 1;
@@ -15,6 +15,15 @@
     font-family: sans-serif;
     -webkit-text-size-adjust: 100%;
     font-size: 100%;
+}
+
+.adoc h1,
+.adoc h2,
+.adoc h3,
+.adoc h4,
+.adoc h5,
+.adoc h6 {
+    scroll-margin-top: 6rem;
 }
 
 .adoc .sect1:last-child {
@@ -287,7 +296,7 @@
 .adoc .listingblock>.content>pre:not(.highlight),
 .adoc .listingblock>.content>pre[class="highlight"],
 .adoc .listingblock>.content>pre[class^="highlight "] {
-    background: #f7f7f8;
+    background: rgb(30 41 59);
 }
 
 .adoc .literalblock.output pre {
@@ -2042,8 +2051,11 @@
 }
 
 .adoc #toc {
-    border-bottom: 1px solid #e7e7e9;
-    padding-bottom: 0.5em;
+    width: 20rem;
+    z-index: 5;
+    padding: 1.25em 1em;
+    height: 100%;
+    overflow: auto;
 }
 
 .adoc #toc>ul {
@@ -2081,19 +2093,37 @@
     font-size: 1.2em;
 }
 
-@media screen and (min-width: 768px) {
-
-    .adoc .literalblock pre,
-    .adoc .listingblock>.content>pre {
-        font-size: 0.90625em;
-    }
-}
-
 @media screen and (min-width: 1280px) {
+
+    .adoc {
+        padding-right: 20rem;
+    }
+
+    .adoc #toc {
+        position: fixed;
+        right: 0;
+        top: 4rem;
+        padding-bottom: 5em;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(8px);
+        border: 1px solid #e7e7e9;
+    }
 
     .adoc .literalblock pre,
     .adoc .listingblock>.content>pre {
         font-size: 1em;
+    }
+
+    .adoc #toc #toctitle {
+        font-size: 1.375em;
+    }
+
+    .adoc #toc>ul {
+        font-size: 0.95em;
+    }
+
+    .adoc #toc ul ul {
+        padding-left: 1.25em;
     }
 }
 
@@ -2127,81 +2157,37 @@
     .adoc h4 {
         font-size: 1.4375em;
     }
-}
 
-@media screen and (min-width: 768px) {
-
-    .adoc.toc2.toc-right #toc.toc2 {
-        border-right-width: 0;
-        border-left: 1px solid #e7e7e9;
-        left: auto;
-        right: 0;
+    .adoc .literalblock pre,
+    .adoc .listingblock>.content>pre {
+        font-size: 0.90625em;
     }
 
     .adoc #toctitle {
         font-size: 1.375em;
     }
 
-    .adoc #toc.toc2 {
-        margin-top: 0 !important;
-        background: #f8f8f7;
-        position: fixed;
-        width: 15em;
-        left: 0;
-        top: 0;
-        border-right: 1px solid #e7e7e9;
-        border-top-width: 0 !important;
-        border-bottom-width: 0 !important;
-        z-index: 1000;
-        padding: 1.25em 1em;
-        height: 100%;
-        overflow: auto;
-    }
-
-    .adoc #toc.toc2 #toctitle {
+    .adoc #toc #toctitle {
         margin-top: 0;
         margin-bottom: 0.8rem;
         font-size: 1.2em;
     }
 
-    .adoc #toc.toc2>ul {
+    .adoc #toc>ul {
         font-size: 0.9em;
         margin-bottom: 0;
     }
 
-    .adoc #toc.toc2 ul ul {
+    .adoc #toc ul ul {
         margin-left: 0;
         padding-left: 1em;
     }
 
-    .adoc #toc.toc2 ul.sectlevel0 ul.sectlevel1 {
+    .adoc #toc ul.sectlevel0 ul.sectlevel1 {
         padding-left: 0;
         margin-top: 0.5em;
         margin-bottom: 0.5em;
     }
-}
-
-@media screen and (min-width: 1280px) {
-
-    .adoc #toc.toc2 {
-        width: 20em;
-    }
-    
-    .adoc #toc.toc2 #toctitle {
-        font-size: 1.375em;
-    }
-    
-    .adoc #toc.toc2>ul {
-        font-size: 0.95em;
-    }
-    
-    .adoc #toc.toc2 ul ul {
-        padding-left: 1.25em;
-    }
-
-}
-
-@media screen and (min-width: 768px) {
 
     .adoc #content {
         margin-bottom: 1.25em;
@@ -2210,5 +2196,4 @@
     .adoc .sect1 {
         padding-bottom: 1.25em;
     }
-
 }

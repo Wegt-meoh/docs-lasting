@@ -10,7 +10,8 @@ export default function handler(
   try {
     const { id } = req.query;
     if (typeof id !== "string") {
-      throw new Error("id is not string");
+      res.status(404).json("Error: no id in request query");
+      return;
     }
     const content = getBookContentById(id);
     res.status(200).json(content);
