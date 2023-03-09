@@ -81,9 +81,40 @@ export function getAllBooksList() {
   });
 }
 
+function insertHighlightScript(html: string) {
+  const bodyEndIndex = html.lastIndexOf("</body>");
+
+  return `${html.slice(
+    0,
+    bodyEndIndex
+  )}<script src="/highlight/highlight.min.js"></script>
+    <script>
+    if (!hljs.initHighlighting.called) {
+      hljs.initHighlighting.called = true
+      ;[].slice.call(document.querySelectorAll('pre.highlight > code')).forEach(function (el) { hljs.highlightBlock(el) })
+    }
+    </script>${html.slice(bodyEndIndex)}`;
+}
+
+function insertHightLightStyleSheet(html: string, theme: string) {
+  const headEndIndex = html.lastIndexOf("</head>");
+  return `${html.slice(
+    0,
+    headEndIndex
+  )}<link rel="stylesheet" href="/highlight/styles/${theme}.min.css">${html.slice(
+    headEndIndex
+  )}`;
+}
+
 export function getBookContentById(id: string) {
   const fullPath = path.join(postsDirectory, id) + ".adoc";
   const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
   doc.setAttribute("stylesheet", "/asciidoctor.default.css");
-  return doc.convert();
+  const highlightTheme = doc.getAttribute("highlightjs-theme");
+
+  // doc.convert没有插入highlight.js的script代码以及对应css样式
+  return insertHightLightStyleSheet(
+    insertHighlightScript(doc.convert()),
+    highlightTheme
+  );
 }
