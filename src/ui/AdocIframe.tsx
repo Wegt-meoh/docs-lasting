@@ -1,16 +1,24 @@
 "use client";
 
+import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
+
 type OnLoadType = React.HtmlHTMLAttributes<HTMLIFrameElement>["onLoad"];
 
 export default function AdocIframe({ content }: { content: string }) {
+  const [hidden, setHidden] = useState(true);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   // before iframe load data,iframe's height is unkown and not changes automaticly after data loaded.
   //   const adjustHeight: OnLoadType = (ev) => {
   //     ev.currentTarget.height =
   //       ev.currentTarget.contentDocument?.body.scrollHeight + "" ?? "100vh";
   //   };
 
-  const handleAdocLink: OnLoadType = (ev) => {
-    const doc = ev.currentTarget.contentDocument;
+  const handleAdocLink = (ev: HTMLIFrameElement | null) => {
+    if (!ev) {
+      return;
+    }
+    const doc = ev.contentDocument;
     if (!doc) {
       return;
     }
@@ -28,10 +36,16 @@ export default function AdocIframe({ content }: { content: string }) {
       };
     }
   };
+
+  useEffect(() => {
+    handleAdocLink(iframeRef.current);
+    setHidden(false);
+  }, [iframeRef]);
   return (
     <iframe
+      className={clsx({ hidden: hidden, block: !hidden })}
       id="adoc-iframe"
-      onLoad={handleAdocLink}
+      ref={iframeRef}
       title="adoc-iframe"
       srcDoc={content}
     />
