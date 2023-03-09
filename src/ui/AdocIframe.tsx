@@ -37,8 +37,23 @@ export default function AdocIframe({ content }: { content: string }) {
     }
   };
 
+  const handleHighlightStyle = (ev: HTMLIFrameElement | null) => {
+    if (!ev) {
+      return;
+    }
+    const doc = ev.contentDocument;
+    if (!doc) {
+      return;
+    }
+    const preElements = doc.getElementsByTagName("pre");
+    for (let i = 0; i < preElements.length; i += 1) {
+      preElements[i].classList.add("highlightjs");
+    }
+  };
+
   useEffect(() => {
     handleAdocLink(iframeRef.current);
+    handleHighlightStyle(iframeRef.current);
     setHidden(false);
   }, [iframeRef]);
   return (
