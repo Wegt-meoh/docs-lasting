@@ -83,6 +83,7 @@ export function getAllBooksList() {
 
 export function getBookContentById(id: string) {
   const fullPath = path.join(postsDirectory, id) + ".adoc";
-  const doc = asciiDoctor.loadFile(fullPath);
+  const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
+  doc.setAttribute("stylesheet", "/asciidoctor.default.css");
   return doc.convert();
 }

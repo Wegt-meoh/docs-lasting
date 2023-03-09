@@ -39,3 +39,8 @@ html.js>body{
     background-size: 100%;
     background-repeat: no-repeat;
 }
+
+#adoc-iframe{
+    width: 100%;
+    height: calc(100vh - 4rem);
+}

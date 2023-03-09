@@ -9,9 +9,9 @@ export default async function Layout({
   const booklistData = await getBooklistData();
 
   return (
-    <div className=" pt-16 relative book_bg">
+    <div className="relative">
       <nav
-        className=" w-80 fixed top-16 left-0 h-full overflow-auto 
+        className=" w-80 absolute top-0 left-0 h-full overflow-auto 
       bg-white/60 backdrop-blur ring-1 ring-slate-200
        pt-8 pb-24"
       >
@@ -30,7 +30,7 @@ export default async function Layout({
           })}
         </ul>
       </nav>
-      <main className=" ml-80 min-h-screen">{children}</main>
+      <main className="pl-80">{children}</main>
     </div>
   );
 }

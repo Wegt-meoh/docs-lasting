@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <LinkGroup />
         </div>
       </header>
-      <main>{children}</main>
+      <main className=" relative pt-16">{children}</main>
     </div>
   );
 }
