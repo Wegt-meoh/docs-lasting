@@ -1,6 +1,7 @@
 = Object.defineProperties
 :source-highlighter: highlight.js
 :highlightjs-theme: xcode
+:toc: right
 :description: introduce Object.defineProperties
 lasting <lastingcoder@qq.com>
 
