@@ -1,0 +1,106 @@
+= Ethereum
+:toc: right
+
+====
+Ethereum is a technology for building apps and organizations, holding assets, transacting and communicating without being controlled by a central authority. There is no need to hand over all your personal details to use Ethereum - you keep control of your own data and what is being shared. Ethereum has its own cryptocurrency, Ether, which is used to pay for certain activities on the Ethereum network.
+
+Still confused? Let's explain everything step-by-step.
+====
+
+== What is a cryptocurrency?
+
+*Crypto (short for cryptocurrency) is a new form of digital money powered by cryptography.*
+
+It all started in 2008 with Bitcoin. You could use it to send funds to anyone anywhere globally. What made crypto different from normal bank transfers or other financial services like Paypal or Alipay is that there was no middleman for the first time.
+
+Wait, what is a middleman?
+
+A middleman is a central authority like a bank or government that intervenes in a transaction between the sender and recipient. They have the power to surveill, censor or revert transactions and they can share the sensitive data they collect about you with third parties. They also often dictate which financial services you have access to.
+
+Things are different with crypto. *Transactions directly connect sender and recipient* without having to deal with any central authority. Nobody else will have access to your funds and *nobody can tell you what services you can use*. This is possible because of the blockchain technology upon which cryptocurrencies operate.
+
+== What is blockchain?
+
+====
+*A blockchain is a database of transactions* that is updated and shared across many computers in a network. Every time a new set of transactions is added, its called a “block” - hence the name blockchain. Most blockchains are public, and you can only add data, not remove. If someone wanted to alter any of the information or cheat the system, they’d need to do so on the majority of computers on the network. That is a lot! This makes established blockchains like Ethereum highly secure.
+====
+
+== Why it is called cryptocurrency?
+
+====
+Blockchains use cryptographic techniques to ensure that your funds are safe. Similar techniques have been used in the banking industries to ensure the security of monetary transactions for years. So you could say cryptocurrencies have a bank level of security.
+====
+
+== What is the difference between Ethereum and Bitcoin?
+
+Launched in 2015, Ethereum builds on Bitcoin's innovation, with some big differences.
+
+Both let you use digital money without payment providers or banks. But Ethereum is *programmable*, so you can also build and deploy decentralized applications on its network.
+
+Ethereum being programmable means that you can build apps that use the blockchain to store data or control what your app can do. This results in a general purpose blockchain that can be programmed to do anything. As there is no limit to what Ethereum can do, it allows for great innovation to happen on the Ethereum network.
+
+While Bitcoin is only a payment network, Ethereum is more like a marketplace of financial services, games, social networks and other apps that respect your privacy and cannot censor you.
+
+== What can Ethereum do?
+
+* Banking for everyone
++
+Not everyone has access to financial services. But all you need to access Ethereum and its lending, borrowing and savings products is an internet connection.
+
+* A more private internet
++
+You don't need to provide all your personal details to use an Ethereum app. Ethereum is building an economy based on value, not surveillance.
+
+* A peer-to-peer network
++
+Ethereum allows you to move money, or make agreements, directly with someone else. You don't need to go through intermediary companies.
+
+* Censorship-resistant
++
+No government or company has control over Ethereum. This decentralization makes it nearly impossible for anyone to stop you from receiving payments or using services on Ethereum.
+
+* Commerce guarantees
++
+Customers have a secure, built-in guarantee that funds will only change hands if you provide what was agreed. Likewise, developers can have certainty that the rules won't change on them.
+
+* All products are composable
++
+Since all apps are built on the same blockchain with a shared global state, they can build off each other (like legos). This allows for better products and experiences being built all the time.
+
+== Why would I use Ethereum?
+
+If you’ve ever sent money overseas (or plan to), or had to worry about the future of your assets due to external forces outside of your control where you live, or been fed up by the numerous restrictions and fees imposed by traditional financial institutions for everyday transactions, you might be interested in what cryptocurrencies have to offer.
+
+Bear in mind that Ethereum is a story that is still being written, and many more reasons to use it are being uncovered as it evolves and develops over time.
+
+== What can I do with ETH coins?
+
+Turns out: a lot of things! One of the most prominent usages of the Ethereum technology is decentralized finance (DeFi) that opens entire areas of banking services to anybody with an internet connection. You can use your ether as a collateral to take out loans or provide liquidity to earn interest on your funds.
+
+== Who runs Ethereum?
+
+Ethereum is not controlled by any one entity. It exists solely through the decentralized participation and cooperation of the community. Ethereum makes use of nodes (a computer with a copy of the Ethereum blockchain data) run by volunteers to replace individual server and cloud systems owned by major internet providers and services.
+
+These distributed nodes, run by individuals and businesses all over the world, provide resiliency to the Ethereum network infrastructure. It is therefore much less vulnerable to hacks or shutdowns. *Since its launch in 2015, Ethereum has never suffered downtime.* There are thousands of individual nodes running Ethereum network. This makes Ethereum one of the most decentralized cryptocurrencies out there, second only to bitcoin.
+
+== What are smart contracts?
+
+*Smart contracts are simply computer programs* living on the Ethereum blockchain. They only *execute when triggered by a transaction from a user (or another contract)*. They make Ethereum very flexible in what it can do and distinguish it from other cryptocurrencies. These programs are what we now call decentralized apps, or dapps.
+
+Have you ever used a product that changed its terms of service? Or removed a feature you found useful? Once a smart contract is published to Ethereum, it will be online and operational for as long as Ethereum exists. Not even the author can take it down. Since smart contracts are automated, they do not discriminate against any user and are always ready to use.
+
+Popular examples of smart contracts are lending apps, decentralized trading exchanges, insurance, crowdfunding apps - basically anything you can think of.
+
+== I heard crypto is being used as a tool for criminal activity. Is this true?
+
+Like any form of money, some of it will be misused. However, because all Ethereum transactions happen on an open blockchain, it’s often easier for authorities to track illicit activity than it would be in the traditional financial system, arguably making Ethereum a less appealing choice for those who would rather go undetected.
+
+Crypto is used much less than fiat currencies for criminal purposes according to the key findings of a recent report by Europol, the European Union Agency for Law Enforcement Cooperation:
+
+“The use of cryptocurrencies for illicit activities seems to comprise only a small part of the overall cryptocurrency economy, and it appears to be comparatively smaller than the amount of illicit funds involved in traditional finance.”
+
+== What about Ethereum's energy consumption?
+
+On September 15, 2022, Ethereum went through The Merge upgrade which transitioned Ethereum from proof-of-work to proof-of-stake.
+
+The Merge was Ethereum's biggest upgrade and reduced the energy consumption required to secure Ethereum by 99.95%, creating a more secure network for a much smaller carbon cost. Ethereum is now a low-carbon blockchain while boosting its security and scalability.
