@@ -1,6 +1,7 @@
 import asciidoctor from "asciidoctor";
 import { readdirSync, statSync } from "fs";
 import path from "path";
+import hljs from "highlight.js";
 
 const asciiDoctor = asciidoctor();
 const postsDirectory = path.join(process.cwd(), "docs");
@@ -62,26 +63,37 @@ export function getAllBooksFilePath() {
 }
 
 export function getAllBooksList() {
-  return getAllBooksFilePath().map((filePath) => {
-    const id = filePath
-      .replace(new RegExp(`.adoc$`), "")
-      .replace(new RegExp(`^${postsDirectory}`), "");
-    const doc = asciiDoctor.loadFile(filePath);
-    return {
-      id,
+  try {
+    return getAllBooksFilePath().map((filePath) => {
+      const id = filePath
+        .replace(new RegExp(`.adoc$`), "")
+        .replace(new RegExp(`^${postsDirectory}`), "");
+      const doc = asciiDoctor.loadFile(filePath);
+      return {
+        id,
 
-      title: doc.getTitle() ?? "unresolved title",
+        title: doc.getTitle() ?? "unresolved title",
 
-      //if there is no description instead of it with it's title
-      description: doc.getAttribute(
-        "description",
-        doc.getTitle() ?? "no description..."
-      ),
-    };
-  });
+        //if there is no description instead of it with it's title
+        description: doc.getAttribute(
+          "description",
+          doc.getTitle() ?? "no description..."
+        ),
+      };
+    });
+  } catch (err) {
+    console.log(`lib/posts.ts/getAllBooksList, error reason ${err}`);
+  }
 }
 
-function insertHighlightScript(html: string) {
+function handleAdocLink(html: string) {
+  const tocStartIndex = html.indexOf(`<div id="toc"`);
+  const tocEndIndex = html.indexOf(`<div id="content"`);
+
+  const anchorElement = html.indexOf("<a ");
+}
+
+function highLightCode(html: string) {
   const bodyEndIndex = html.lastIndexOf("</body>");
 
   return `${html.slice(
@@ -89,10 +101,9 @@ function insertHighlightScript(html: string) {
     bodyEndIndex
   )}<script src="/highlight/highlight.min.js"></script>
     <script>
-    if (!hljs.initHighlighting.called) {
-      hljs.initHighlighting.called = true
-      ;[].slice.call(document.querySelectorAll('pre.highlight > code')).forEach(function (el) { hljs.highlightBlock(el) })
-    }
+    document.querySelectorAll('pre code').forEach((el) => {
+        hljs.highlightElement(el);
+      });
     </script>${html.slice(bodyEndIndex)}`;
 }
 
@@ -110,11 +121,14 @@ export function getBookContentById(id: string) {
   const fullPath = path.join(postsDirectory, id) + ".adoc";
   const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
   doc.setAttribute("stylesheet", "/asciidoctor.default.css");
-  const highlightTheme = doc.getAttribute("highlightjs-theme");
-
-  // doc.convert没有插入highlight.js的script代码以及对应css样式
-  return insertHightLightStyleSheet(
-    insertHighlightScript(doc.convert()),
-    highlightTheme
-  );
+  const highlightTheme = doc.getAttribute("highlightjs-theme", "a11y-light");
+  const html = doc.convert();
+  // asciidoctor.Document.convert does not insert highlight.js script code and corresponding CSS styles,
+  // and because of the use of SSR, processing on the client side will cause many problems,
+  // such as the iframe's onload is not executed after refreshing.
+  // So handle code highlighting and insert stylesheet links on the server side.
+  const res = insertHightLightStyleSheet(highLightCode(html), highlightTheme);
+  console.log("res");
+  console.log(res.slice(0, 20));
+  return res;
 }

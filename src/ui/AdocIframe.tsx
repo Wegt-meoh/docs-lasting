@@ -1,13 +1,10 @@
 "use client";
 
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
-
-type OnLoadType = React.HtmlHTMLAttributes<HTMLIFrameElement>["onLoad"];
+import { useState } from "react";
 
 export default function AdocIframe({ content }: { content: string }) {
-  const [hidden, setHidden] = useState(true);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [hidden, setHidden] = useState(false);
   // before iframe load data,iframe's height is unkown and not changes automaticly after data loaded.
   //   const adjustHeight: OnLoadType = (ev) => {
   //     ev.currentTarget.height =
@@ -51,18 +48,27 @@ export default function AdocIframe({ content }: { content: string }) {
     }
   };
 
-  useEffect(() => {
-    handleAdocLink(iframeRef.current);
-    handleHighlightStyle(iframeRef.current);
-    setHidden(false);
-  }, [iframeRef]);
   return (
-    <iframe
-      className={clsx({ hidden: hidden, block: !hidden })}
-      id="adoc-iframe"
-      ref={iframeRef}
-      title="adoc-iframe"
-      srcDoc={content}
-    />
+    <div className="adoc-container">
+      <a
+        title="oo"
+        onClick={() => {
+          console.log("sadf");
+        }}
+      >
+        asdf
+      </a>
+      <iframe
+        className={clsx("adoc-container", { hidden: hidden, block: !hidden })}
+        onLoad={(ev) => {
+          handleAdocLink(ev.currentTarget);
+          handleHighlightStyle(ev.currentTarget);
+          setHidden(false);
+          console.log("iframe onload");
+        }}
+        title="adoc-iframe"
+        srcDoc={content}
+      />
+    </div>
   );
 }

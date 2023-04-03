@@ -35,6 +35,9 @@ after book it's all route parameter
 
 .for example
 ====
-route: /book/javascript/es6/promise.adoc
-parameter: /javascript/es6/promise.adoc
+route: /images/book/javascript/es6/promise.adoc
+parameter: /images/javascript/es6/promise.adoc
 ====
+
+== how to convert .adoc to a web page
+

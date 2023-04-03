@@ -5,7 +5,16 @@ type Data = { id: string; title: string; description: string }[];
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | string>
 ) {
-  res.status(200).json(getAllBooksList());
+  try {
+    const bookListData = getAllBooksList();
+    if (bookListData) {
+      res.status(200).json(bookListData);
+    } else {
+      res.status(500).send("can not get book list data");
+    }
+  } catch (err) {
+    console.log(`pages/api/booklist,error reason: ${err}`);
+  }
 }
