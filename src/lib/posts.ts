@@ -1,6 +1,8 @@
 import asciidoctor from "asciidoctor";
 import { readdirSync, statSync } from "fs";
 import path from "path";
+import * as cheerio from "cheerio";
+import hljs from "highlight.js";
 
 const asciiDoctor = asciidoctor();
 const postsDirectory = path.join(process.cwd(), "docs");
@@ -83,6 +85,22 @@ export function getAllBooksList() {
 
 export function getBookContentById(id: string) {
   const fullPath = path.join(postsDirectory, id) + ".adoc";
-  const doc = asciiDoctor.loadFile(fullPath);
-  return doc.convert();
+  const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
+  const $ = cheerio.load(doc.convert());
+  const $code = $("code").each((index, ele) => {
+    const data = $(ele).text();
+    const eleAttributes = $(ele).attr() ?? {};
+    const languageType = eleAttributes["data-lang"];
+    const highlightResult = hljs.highlightAuto(data, [languageType]);
+    //   $(ele).children().replaceWith(highlightResult.value);
+    $(ele).replaceWith(
+      $(
+        `<code class='hljs ${eleAttributes.class ?? ""}' data-lang='${
+          eleAttributes["data-lang"] ?? ""
+        }'>${highlightResult.value}</code>`
+      )
+    );
+  });
+
+  return $("body").html();
 }

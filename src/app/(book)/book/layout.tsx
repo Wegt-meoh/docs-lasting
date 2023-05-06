@@ -1,4 +1,5 @@
 import { getBooklistData } from "@/lib/booklist";
+import { getAllBooksList } from "@/lib/posts";
 import Link from "next/link";
 
 export default async function Layout({
@@ -6,7 +7,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const booklistData = await getBooklistData();
+  const booklistData = getAllBooksList();
 
   return (
     <div className=" pt-16 relative book_bg">

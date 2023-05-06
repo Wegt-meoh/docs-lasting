@@ -1,19 +1,9 @@
-import { getBooklistData } from "@/lib/booklist";
-import { notFound } from "next/navigation";
+import { getAllBooksList, getBookContentById } from "@/lib/posts";
 
 export const dynamicParams = false;
 
-async function getContentById(id: string) {
-  const res = await fetch(`http://localhost:3000/api/bookContent?id=${id}`);
-  if (res.status === 200) {
-    return res.json();
-  } else {
-    notFound();
-  }
-}
-
 export async function generateStaticParams() {
-  const booklistData = await getBooklistData();
+  const booklistData = getAllBooksList();
 
   return booklistData.map((data) => {
     return { id: data.id.split("/").slice(1) };
@@ -22,7 +12,7 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: { id: string[] } }) {
   const id = params.id.join("/");
-  const content = await getContentById(id);
+  const content = getBookContentById(id);
 
   return (
     <div

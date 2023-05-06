@@ -1,6 +1,7 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700';
 
 .adoc {
+    position: relative;
     color: rgba(0, 0, 0, 0.8);
     padding: 1rem;
     margin: 0;
@@ -298,7 +299,7 @@
 .adoc .listingblock>.content>pre:not(.highlight),
 .adoc .listingblock>.content>pre[class="highlight"],
 .adoc .listingblock>.content>pre[class^="highlight "] {
-    background: rgb(30 41 59);
+    background: #f7f7f8;
 }
 
 .adoc .literalblock.output pre {
@@ -2052,12 +2053,9 @@
     margin-bottom: 1.25rem;
 }
 
-.adoc #toc {
-    width: 20rem;
-    z-index: 5;
-    padding: 1.25em 1em;
-    height: 100%;
-    overflow: auto;
+.adoc>#toc {    
+    position: relative;            
+    padding: 1.25em 1em;        
 }
 
 .adoc #toc>ul {
@@ -2095,20 +2093,23 @@
     font-size: 1.2em;
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1200px) {
 
     .adoc {
-        padding-right: 20rem;
+        padding-right: 16rem;
     }
 
     .adoc #toc {
         position: fixed;
         right: 0;
+        height: 100%;
         top: 4rem;
+        width: 15rem;
         padding-bottom: 5em;
         background: rgba(255, 255, 255, 0.6);
         backdrop-filter: blur(8px);
         border: 1px solid #e7e7e9;
+        overflow: auto;
     }
 
     .adoc .literalblock pre,

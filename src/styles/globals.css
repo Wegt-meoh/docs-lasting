@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 @import './asciidoctor.default.css';
-@import '/highlight/styles/default.min.css';
+@import './highlightjs.default.min.css';
+
+*{
+    padding: 0;
+    margin: 0;
+}
 
 html>body{
     opacity: 0;

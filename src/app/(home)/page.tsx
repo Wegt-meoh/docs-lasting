@@ -1,20 +1,16 @@
+import { getAllBooksList } from "@/lib/posts";
 import { BooklistDataType } from "@/types/booklist";
 import BookBlock from "@/ui/BookBlock";
 import SearchButton from "@/ui/SearchButton";
 import Link from "next/link";
 
-async function getBooklistData() {
-  const res = await fetch(`http://localhost:3000/api/booklist`);
-  return res.json();
-}
-
 export default async function Page() {
-  const booklistData: BooklistDataType[] = await getBooklistData();
+  const booklistData: BooklistDataType[] = getAllBooksList();
 
   return (
     <div>
       <div className="flex flex-col items-center left-32 h-full">
-        <h1 className=" text-6xl mt-24 font-bold text-slate-800 dark:text-slate-50">
+        <h1 className=" text-center text-6xl mt-24 font-bold text-slate-800 dark:text-slate-50">
           Hello I am Lasting, this is a site share my note.
         </h1>
         <div className="mt-12">
