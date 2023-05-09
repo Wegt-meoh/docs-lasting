@@ -2,43 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './asciidoctor.default.css';
-@import './highlightjs.default.min.css';
-
-*{
+* {
     padding: 0;
     margin: 0;
 }
 
-html>body{
+::-webkit-scrollbar{
+    width: 4px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgba(126, 127, 127, 0.632);
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+html>body {
     opacity: 0;
 }
 
-html.js>body{
+html.js>body {
     opacity: 1;
 }
 
-.index_bg{
+.index_bg {
     background-image: url('/images/homebg.jpg');
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: top;
 }
 
-.dark .index_bg{
-    background-image: url('/images/homebg_dark.jpg');   
+.dark .index_bg {
+    background-image: url('/images/homebg_dark.jpg');
     background-size: 100%;
     background-repeat: no-repeat;
-    background-position: top;    
+    background-position: top;
 }
 
-.book_bg{
+.book_bg {
     background-image: url('/images/docbg.png');
     background-size: 100%;
     background-repeat: no-repeat;
 }
 
-.dark .book_bg{
+.dark .book_bg {
     background-image: url('/images/docbg_dark.png');
     background-size: 100%;
     background-repeat: no-repeat;

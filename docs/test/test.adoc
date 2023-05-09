@@ -1,5 +1,5 @@
 = Test
-:toc:
+:source-highlighter: highlight.js
 :description: this is description
 
 == title1
@@ -28,7 +28,6 @@ asbabsdf
 asbabsdf
 asbabsdf
 asbabsdf
-
 
 == title2
 

@@ -87,20 +87,20 @@ export function getBookContentById(id: string) {
   const fullPath = path.join(postsDirectory, id) + ".adoc";
   const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
   const $ = cheerio.load(doc.convert());
-  const $code = $("code").each((index, ele) => {
+  const hasToc = $("#toc").html() !== null;
+  $("code").each((_, ele) => {
     const data = $(ele).text();
     const eleAttributes = $(ele).attr() ?? {};
     const languageType = eleAttributes["data-lang"];
     const highlightResult = hljs.highlightAuto(data, [languageType]);
-    //   $(ele).children().replaceWith(highlightResult.value);
-    $(ele).replaceWith(
-      $(
-        `<code class='hljs ${eleAttributes.class ?? ""}' data-lang='${
-          eleAttributes["data-lang"] ?? ""
-        }'>${highlightResult.value}</code>`
-      )
-    );
+
+    $(ele).empty();
+    $(ele).append(highlightResult.value);
+    $(ele).attr("class", `${eleAttributes.class} hljs`);
   });
 
-  return $("body").html();
+  return `
+    <div class="adoc ${hasToc ? "toc" : ""}">
+        ${$("body").html()}
+    </div>`;
 }

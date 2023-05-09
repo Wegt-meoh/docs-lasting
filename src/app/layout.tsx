@@ -1,4 +1,8 @@
 import "@/styles/globals.css";
+import "@/styles/asciidoctor.dark.css";
+import "@/styles/asciidoctor.default.css";
+import "@/styles/a11y-light.min.css";
+import "@/styles/a11y-dark.min.css";
 
 export default function RootLayout({
   children,

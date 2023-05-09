@@ -2,8 +2,7 @@
 
 import { ThemeType } from "@/types/theme";
 import clsx from "clsx";
-import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ComputerSvg from "./ComputerSvg";
 import DarkSvg from "./DarkSvg";
 import LightSvg from "./LightSvg";

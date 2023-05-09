@@ -13,11 +13,6 @@ export async function generateStaticParams() {
 export default async function Page({ params }: { params: { id: string[] } }) {
   const id = params.id.join("/");
   const content = getBookContentById(id);
-
-  return (
-    <div
-      className="adoc min-h-screen"
-      dangerouslySetInnerHTML={{ __html: content }}
-    />
-  );
+  if (!content) return null;
+  return <div dangerouslySetInnerHTML={{ __html: content }} />;
 }
