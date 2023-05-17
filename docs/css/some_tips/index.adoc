@@ -1,0 +1,10 @@
+= some problems I am having with development
+
+== How to reserve space for scroll bar
+
+. overflow: scroll
+
+== Ellipsis when text overflow
+
+. overflow: hidden
+. text-overflow: ellipsis

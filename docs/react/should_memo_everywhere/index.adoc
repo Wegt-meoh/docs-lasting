@@ -1,0 +1,21 @@
+= Should memo everywhere
+
+If your app is like react doc site, and most interactions are coarse (like replacing a page or an entire section), memoization is usually unnecessary. On the other hand, if your app is more like a drawing editor, and most interactions are granular (like moving shapes), then you might find memoization very helpful.
+
+Optimizing with `memo` is only valuable when your component re-renders often with the same exact props, and its re-rendering logic is expensive. If there is no perceptible lag when your component re-renders, `memo` is unnecessary. Keep in mind that `memo` is completely useless if the props passed to your component are _always different_, such as if you pass an object or a plain function defined during rendering. This is why you will often need useMemo and useCallback together with memo.
+
+There is no benefit to wrapping a component in `memo` in other cases. There is no significant harm to doing that either, so some teams choose to not think about individual cases, and memoize as much as possible. The downside of this approach is that code becomes less readable. Also, not all memoization is effective: a single value that’s “always new” is enough to break memoization for an entire component.
+
+*In practice, you can make a lot of memoization unnecessary by following a few principles:*
+
+. When a component visually wraps other components, let it *accept JSX as children*. This way, when the wrapper component updates its own state, React knows that its children don’t need to re-render.
+
+. Prefer local state and don’t *lift state up* any further than necessary. For example, don’t keep transient state like forms and whether an item is hovered at the top of your tree or in a global state library.
+
+. Keep your *rendering logic pure*. If re-rendering a component causes a problem or produces some noticeable visual artifact, it’s a bug in your component! Fix the bug instead of adding memoization.
+
+. Avoid *unnecessary Effects that update state*. Most performance problems in React apps are caused by chains of updates originating from Effects that cause your components to render over and over.
+
+. *Try to remove unnecessary dependencies* from your Effects. For example, instead of memoization, it’s often simpler to move some object or a function inside an Effect or outside the component.
+
+If a specific interaction still feels laggy, *use the React Developer Tools profiler* to see which components would benefit the most from memoization, and add memoization where needed. These principles make your components easier to debug and understand, so it’s good to follow them in any case. In the long term, we’re researching *doing granular memoization automatically* to solve this once and for all.

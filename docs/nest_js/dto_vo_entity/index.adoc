@@ -1,0 +1,17 @@
+= What is dto entity and vo?
+
+== entity
+
+entity中的每个字段和数据库对应，是描述数据库的对象。
+
+== dto(data transform object)
+
+数据转化对象，可以用于entity到vo或者vo到entity的转化。
+
+== vo(view object)
+
+向渲染层传输的对象，里面的数据用于直接渲染。
+
+
+
+
