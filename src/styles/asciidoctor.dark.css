@@ -158,7 +158,7 @@
 .dark .adoc .ulist>.title,
 .dark .adoc .qlist>.title,
 .dark .adoc .hdlist>.title {
-    color: var(--text-primary);
+    color: var(--text-red);
 }
 
 .dark .adoc a {
@@ -320,7 +320,7 @@
 }
 
 .dark .adoc :not(pre):not([class^="L"])>code {
-    background: var(--background-primary);
+    background: var(--background-secondary);
 }
 
 .dark .adoc #toc {    
