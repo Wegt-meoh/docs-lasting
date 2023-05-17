@@ -12,29 +12,23 @@ All note formats are *#adoc#*
 
 .for example: the full path of a note
 ====
-/doc/javascript/es6/promise.adoc
+/docs/javascript/es6/promise.adoc
 ====
 
 == route design
-* `/`: shows all first-level heading for all note with a link.
+under your folder `/docs`
 
-* `/book/...`: shows the content and table of content.
-
+* for directory:
 +
-.for example: a book about nodeJs's file system flags
-====
-route: /book/nodeJs/FileSystemFlags
-
-use the file system path as it route
-====
-
-== dynamic route
-/book/.../.../...
-
-after book it's all route parameter
-
-.for example
-====
-route: /book/javascript/es6/promise.adoc
-parameter: /javascript/es6/promise.adoc
-====
+you need put a `index.adoc` for it， for example:
++
+----
+docs
+|-- html
+|   |-- other
+|   |-- shadow-dom.adoc
+|   |-- index.adoc
+|-- css
+|-- javascript
+|-- index.adoc
+----

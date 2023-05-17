@@ -14,32 +14,34 @@ export default function SearchButton({
   const [modalOpen, setModalOpen] = useState(false);
   const [commandText, setCommandText] = useState<"⌘ " | "Ctrl ">("Ctrl ");
 
+  // bind key board listener
   useEffect(() => {
-    document.addEventListener("keydown", (ev) => {
+    const listener = (ev: KeyboardEvent) => {
       if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "k") {
-        setModalOpen(true);
+        setModalOpen((e) => !e);
       } else if (ev.key === "Escape") {
         setModalOpen(false);
       }
-    });
+    };
+
+    document.addEventListener("keydown", listener);
 
     return () => {
-      document.removeEventListener("keydown", (ev) => {
-        if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "k") {
-          setModalOpen(true);
-        } else if (ev.key === "Escape") {
-          setModalOpen(false);
-        }
-      });
+      document.removeEventListener("keydown", listener);
     };
   }, []);
 
+  // Set button text according to navigator.userAgent.
+  // Because of react, this code need to be put in useEffct,
+  // or not it will throw navigator is not define error
   useEffect(() => {
-    const res =
-      navigator.userAgent.toLowerCase().indexOf("mac os") >= 0 ? "⌘ " : "Ctrl ";
+    const res = navigator.userAgent.toLowerCase().includes("mac os")
+      ? "⌘ "
+      : "Ctrl ";
     setCommandText(res);
   }, []);
 
+  // Avoid body scrolling,when modal is open
   useEffect(() => {
     if (modalOpen) {
       document.body.classList.add("overflow-hidden");

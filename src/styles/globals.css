@@ -41,15 +41,3 @@ html.js>body {
     background-repeat: no-repeat;
     background-position: top;
 }
-
-.book_bg {
-    background-image: url('/images/docbg.png');
-    background-size: 100%;
-    background-repeat: no-repeat;
-}
-
-.dark .book_bg {
-    background-image: url('/images/docbg_dark.png');
-    background-size: 100%;
-    background-repeat: no-repeat;
-}
