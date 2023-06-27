@@ -37,3 +37,4 @@ next-env.d.ts
 
 # docs-lasting
 /docs/**/*.html
+.pnpm-store
