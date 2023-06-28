@@ -5,38 +5,9 @@ import * as cheerio from "cheerio";
 import hljs from "highlight.js";
 
 const asciiDoctor = asciidoctor();
-const postsDirectory = path.join(process.cwd(), "docs");
+const postsDirectory = path.join(process.cwd(), "/public/docs");
 
-export function getSortedData() {
-  const fileNames = readdirSync(postsDirectory);
-  const allPostsData = fileNames
-    .filter((fileName) => {
-      return fileName.endsWith(".adoc") ? true : false;
-    })
-    .map((fileName) => {
-      const id = fileName.replace(/\.adoc$/, "");
-      const fullPath = path.join(postsDirectory, fileName);
-
-      const doc = asciiDoctor.loadFile(fullPath);
-      const raw = doc.convert({ standalone: true });
-
-      const htmlContent = raw
-        .slice(raw.indexOf("<body"), raw.indexOf("</body>") + 7)
-        .replace("<body", "<div")
-        .replace("</body>", "</div>");
-
-      return {
-        id,
-        htmlContent,
-      };
-    });
-
-  return allPostsData.sort((a, b) => {
-    return a.id < b.id ? 1 : -1;
-  });
-}
-
-export function getAllBooksFilePath() {
+export function getAllDocsFilePath() {
   const fileNameList: string[] = [];
   const readDirFile = (dir: string) => {
     readdirSync(dir, "utf-8")
@@ -63,8 +34,8 @@ export function getAllBooksFilePath() {
   return fileNameList;
 }
 
-export function getAllBooksList() {
-  return getAllBooksFilePath().map((filePath) => {
+export function getAllDocsLinkData() {
+  return getAllDocsFilePath().map((filePath) => {
     const id = filePath
       .replace(new RegExp(`.adoc$`), "")
       .replace(new RegExp(`^${postsDirectory}`), "");
@@ -83,9 +54,10 @@ export function getAllBooksList() {
   });
 }
 
-export function getBookContentById(id: string) {
+export function getDocRawHtmlById(id: string) {
   const fullPath = path.join(postsDirectory, id) + ".adoc";
   const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
+  doc.setAttribute("imagesdir", `/docs/${path.dirname(id)}`);
   const $ = cheerio.load(doc.convert());
   const hasToc = $("#toc").html() !== null;
   $("code").each((_, ele) => {
