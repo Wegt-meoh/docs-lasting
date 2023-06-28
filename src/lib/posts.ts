@@ -1,8 +1,9 @@
-import asciidoctor from "asciidoctor";
+import asciidoctor, { AbstractBlock, Extensions } from "asciidoctor";
 import { readdirSync, statSync } from "fs";
 import path from "path";
 import * as cheerio from "cheerio";
 import hljs from "highlight.js";
+import { imageTreeProcessor } from "./image-tree-processor";
 
 const asciiDoctor = asciidoctor();
 const postsDirectory = path.join(process.cwd(), "/public/docs");
@@ -60,6 +61,7 @@ export function getDocRawHtmlById(id: string) {
   doc.setAttribute("imagesdir", `/docs/${path.dirname(id)}`);
   const $ = cheerio.load(doc.convert());
   const hasToc = $("#toc").html() !== null;
+
   $("code").each((_, ele) => {
     const data = $(ele).text();
     const eleAttributes = $(ele).attr() ?? {};

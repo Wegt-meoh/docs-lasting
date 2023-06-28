@@ -1,12 +1,12 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700';
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";
 
-.adoc{
-    --toc-width:16rem;
+.adoc {
+    --toc-width: 16rem;
 }
 
 .adoc {
     position: relative;
-    color: rgba(0, 0, 0, 0.8);    
+    color: rgba(0, 0, 0, 0.8);
     margin: 0;
     font-family: "Noto Serif", "DejaVu Serif", serif;
     line-height: 1;
@@ -1953,7 +1953,7 @@
     width: 100%;
     margin: 0 auto;
     max-width: 62.5em;
-    *zoom: 1;
+    zoom: 1;
     position: relative;
     padding-left: 0.9375em;
     padding-right: 0.9375em;
@@ -2051,10 +2051,10 @@
     margin-bottom: 1.25rem;
 }
 
-.adoc #toc {    
-    position: relative;  
-    background: rgba(255, 255, 255, 0.6);          
-    padding: 1.25em 1em;           
+.adoc #toc {
+    position: relative;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 1.25em 1em;
 }
 
 .adoc #toc>ul {
@@ -2093,7 +2093,6 @@
 }
 
 @media screen and (min-width: 1200px) {
-
     .adoc.toc {
         margin-right: var(--toc-width);
     }
@@ -2105,7 +2104,7 @@
         top: 4rem;
         width: var(--toc-width);
         margin: 0;
-        padding-bottom: 5em;        
+        padding-bottom: 5em;
         backdrop-filter: blur(8px);
         border-left: 1px solid #e4e4e4;
         overflow: auto;
@@ -2126,7 +2125,7 @@
 
     .adoc #toc ul ul {
         padding-left: 1.25em;
-    }    
+    }
 }
 
 @media screen and (min-width: 768px) {

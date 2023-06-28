@@ -4,7 +4,7 @@
     --text-inactive: #cdcdcda6;
     --text-link: #e78610;
     --text-red: #ba3925;
-    --text-orange:#e78610;
+    --text-orange: #e78610;
     --text-pink: #e99b8f;
     --background-primary: #1b1b1b;
     --background-secondary: #343434;
@@ -15,7 +15,7 @@
 
 .dark .adoc {
     color: var(--text-primary);
-    background: var(--background-primary);    
+    background: var(--background-primary);
 }
 
 .dark .adoc .paragraph.lead>p,
@@ -87,11 +87,11 @@
 .dark .adoc tbody tr th p,
 .dark .adoc tfoot tr th,
 .dark .adoc tfoot tr th p {
-    color: var(--text-primary)
+    color: var(--text-primary);
 }
 
 .dark .adoc .admonitionblock td.icon [class^="fa icon-"] {
-    text-shadow:none;
+    text-shadow: none;
 }
 
 .dark .adoc .admonitionblock td.icon .icon-note::before {
@@ -178,7 +178,7 @@
 .dark .adoc h4,
 .dark .adoc h5,
 .dark .adoc h6 {
-  color:var(--text-orange)
+    color: var(--text-orange);
 }
 
 .dark .adoc h1 small,
@@ -258,7 +258,7 @@
 
 .dark .adoc #header>h1:only-child,
 .dark .adoc body.toc2 #header>h1:nth-last-child(2) {
-    border-bottom: 1px solid var(--border-primary);    
+    border-bottom: 1px solid var(--border-primary);
 }
 
 .dark .adoc #header .details {
@@ -276,7 +276,7 @@
 
 .dark .adoc #content>h1:first-child:not([class]) {
     color: var(--text-primary);
-    border-bottom: 1px solid var(--border-primary);    
+    border-bottom: 1px solid var(--border-primary);
 }
 
 .dark .adoc #toctitle {
@@ -284,8 +284,8 @@
 }
 
 .dark .adoc .sidebarblock {
-    border: 1px solid var(--border-primary);    
-    background: var(--background-primary);   
+    border: 1px solid var(--border-primary);
+    background: var(--background-primary);
 }
 
 .dark .adoc .literalblock pre,
@@ -323,13 +323,13 @@
     background: var(--background-secondary);
 }
 
-.dark .adoc #toc {    
-    background: var(--background-secondary);       
+.dark .adoc #toc {
+    background: var(--background-secondary);
 }
 
 @media screen and (min-width: 1200px) {
-    .dark .adoc #toc{
+    .dark .adoc #toc {
         border-left: 1px solid var(--border-primary);
-        background: var(--background-primary);  
+        background: var(--background-primary);
     }
 }

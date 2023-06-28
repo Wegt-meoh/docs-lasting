@@ -1,0 +1,5 @@
+.next
+.pnpm-store
+.vscode
+node-modules
+public
