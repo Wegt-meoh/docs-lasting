@@ -1,335 +1,335 @@
 .dark {
-    --text-primary: #fff;
-    --text-secondary: #cdcdcd;
-    --text-inactive: #cdcdcda6;
-    --text-link: #e78610;
-    --text-red: #ba3925;
-    --text-orange:#e78610;
-    --text-pink: #e99b8f;
-    --background-primary: #1b1b1b;
-    --background-secondary: #343434;
-    --background-tertiary: #4e4e4e;
-    --border-primary: #858585;
-    --border-secondary: #696969;
+  --text-primary: #fff;
+  --text-secondary: #cdcdcd;
+  --text-inactive: #cdcdcda6;
+  --text-link: #e78610;
+  --text-red: #ba3925;
+  --text-orange: #e78610;
+  --text-pink: #e99b8f;
+  --background-primary: #1b1b1b;
+  --background-secondary: #343434;
+  --background-tertiary: #4e4e4e;
+  --border-primary: #858585;
+  --border-secondary: #696969;
 }
 
 .dark .adoc {
-    color: var(--text-primary);
-    background: var(--background-primary);    
+  color: var(--text-primary);
+  background: var(--background-primary);
 }
 
-.dark .adoc .paragraph.lead>p,
-.dark .adoc #preamble>.sectionbody>[class="paragraph"]:first-of-type p {
-    color: var(--text-primary);
+.dark .adoc .paragraph.lead > p,
+.dark .adoc #preamble > .sectionbody > [class="paragraph"]:first-of-type p {
+  color: var(--text-primary);
 }
 
-.dark .adoc #content h1>a.link,
-.dark .adoc h2>a.link,
-.dark .adoc h3>a.link,
-.dark .adoc #toctitle>a.link,
-.dark .adoc .sidebarblock>.content>.title>a.link,
-.dark .adoc h4>a.link,
-.dark .adoc h5>a.link,
-.dark .adoc h6>a.link {
-    color: var(--text-primary);
+.dark .adoc #content h1 > a.link,
+.dark .adoc h2 > a.link,
+.dark .adoc h3 > a.link,
+.dark .adoc #toctitle > a.link,
+.dark .adoc .sidebarblock > .content > .title > a.link,
+.dark .adoc h4 > a.link,
+.dark .adoc h5 > a.link,
+.dark .adoc h6 > a.link {
+  color: var(--text-primary);
 }
 
-.dark .adoc #content h1>a.link:hover,
-.dark .adoc h2>a.link:hover,
-.dark .adoc h3>a.link:hover,
-.dark .adoc #toctitle>a.link:hover,
-.dark .adoc .sidebarblock>.content>.title>a.link:hover,
-.dark .adoc h4>a.link:hover,
-.dark .adoc h5>a.link:hover,
-.dark .adoc h6>a.link:hover {
-    color: var(--text-primary);
+.dark .adoc #content h1 > a.link:hover,
+.dark .adoc h2 > a.link:hover,
+.dark .adoc h3 > a.link:hover,
+.dark .adoc #toctitle > a.link:hover,
+.dark .adoc .sidebarblock > .content > .title > a.link:hover,
+.dark .adoc h4 > a.link:hover,
+.dark .adoc h5 > a.link:hover,
+.dark .adoc h6 > a.link:hover {
+  color: var(--text-primary);
 }
 
-.dark .adoc .paragraph.lead>p,
-.dark .adoc #preamble>.sectionbody>[class="paragraph"]:first-of-type p {
-    color: var(--text-primary);
+.dark .adoc .paragraph.lead > p,
+.dark .adoc #preamble > .sectionbody > [class="paragraph"]:first-of-type p {
+  color: var(--text-primary);
 }
 
-.dark .adoc .admonitionblock>table td.content {
-    border-left: 1px solid #dddddf;
-    color: var(--text-primary);
+.dark .adoc .admonitionblock > table td.content {
+  border-left: 1px solid #dddddf;
+  color: var(--text-primary);
 }
 
-.dark .adoc .sidebarblock>.content>.title {
-    color: var(--text-primary);
+.dark .adoc .sidebarblock > .content > .title {
+  color: var(--text-primary);
 }
 
 .dark .adoc .literalblock.output pre {
-    color: var(--text-primary);
-    background: var(--background-primary);
+  color: var(--text-primary);
+  background: var(--background-primary);
 }
 
 .dark .adoc .quoteblock blockquote,
 .dark .adoc .quoteblock p {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc .quoteblock blockquote::before {
-    color: var(--text-primary);
-    text-shadow: none;
+  color: var(--text-primary);
+  text-shadow: none;
 }
 
 .dark .adoc .verseblock pre {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc .quoteblock .attribution cite,
 .dark .adoc .verseblock .attribution cite {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc tbody tr th,
 .dark .adoc tbody tr th p,
 .dark .adoc tfoot tr th,
 .dark .adoc tfoot tr th p {
-    color: var(--text-primary)
+  color: var(--text-primary);
 }
 
 .dark .adoc .admonitionblock td.icon [class^="fa icon-"] {
-    text-shadow:none;
+  text-shadow: none;
 }
 
 .dark .adoc .admonitionblock td.icon .icon-note::before {
-    color: #19407c;
+  color: #19407c;
 }
 
 .dark .adoc .admonitionblock td.icon .icon-tip::before {
-    text-shadow: none;
-    color: var(--text-primary);
+  text-shadow: none;
+  color: var(--text-primary);
 }
 
 .dark .adoc .admonitionblock td.icon .icon-warning::before {
-    color: #bf6900;
+  color: #bf6900;
 }
 
 .dark .adoc .admonitionblock td.icon .icon-caution::before {
-    color: #bf3400;
+  color: #bf3400;
 }
 
 .dark .adoc .admonitionblock td.icon .icon-important::before {
-    color: #bf0000;
+  color: #bf0000;
 }
 
 .dark .adoc .conum[data-value] {
-    color: #fff !important;
-    background: var(--background-primary);
+  color: #fff !important;
+  background: var(--background-primary);
 }
 
 .dark .adoc .conum[data-value] * {
-    color: #fff !important;
+  color: #fff !important;
 }
 
-.dark .adoc .exampleblock>.content {
-    background: var(--background-primary);
-    border-color: var(--background-secondary);
-    box-shadow: none;
+.dark .adoc .exampleblock > .content {
+  background: var(--background-primary);
+  border-color: var(--background-secondary);
+  box-shadow: none;
 }
 
 .dark .adoc #footer-text {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc mark {
-    background: #ff0;
-    color: var(--text-primary);
+  background: #ff0;
+  color: var(--text-primary);
 }
 
 .dark .adoc .subheader,
-.dark .adoc .admonitionblock td.content>.title,
-.dark .adoc .audioblock>.title,
-.dark .adoc .exampleblock>.title,
-.dark .adoc .imageblock>.title,
-.dark .adoc .listingblock>.title,
-.dark .adoc .literalblock>.title,
-.dark .adoc .stemblock>.title,
-.dark .adoc .openblock>.title,
-.dark .adoc .paragraph>.title,
-.dark .adoc .quoteblock>.title,
-.dark .adoc table.tableblock>.title,
-.dark .adoc .verseblock>.title,
-.dark .adoc .videoblock>.title,
-.dark .adoc .dlist>.title,
-.dark .adoc .olist>.title,
-.dark .adoc .ulist>.title,
-.dark .adoc .qlist>.title,
-.dark .adoc .hdlist>.title {
-    color: var(--text-primary);
+.dark .adoc .admonitionblock td.content > .title,
+.dark .adoc .audioblock > .title,
+.dark .adoc .exampleblock > .title,
+.dark .adoc .imageblock > .title,
+.dark .adoc .listingblock > .title,
+.dark .adoc .literalblock > .title,
+.dark .adoc .stemblock > .title,
+.dark .adoc .openblock > .title,
+.dark .adoc .paragraph > .title,
+.dark .adoc .quoteblock > .title,
+.dark .adoc table.tableblock > .title,
+.dark .adoc .verseblock > .title,
+.dark .adoc .videoblock > .title,
+.dark .adoc .dlist > .title,
+.dark .adoc .olist > .title,
+.dark .adoc .ulist > .title,
+.dark .adoc .qlist > .title,
+.dark .adoc .hdlist > .title {
+  color: var(--text-red);
 }
 
 .dark .adoc a {
-    color: var(--text-secondary);
+  color: var(--text-secondary);
 }
 
 .dark .adoc a:hover,
 .dark .adoc a:focus {
-    color: var(--text-link);
+  color: var(--text-link);
 }
 
 .dark .adoc h1,
 .dark .adoc h2,
 .dark .adoc h3,
 .dark .adoc #toctitle,
-.dark .adoc .sidebarblock>.content>.title,
+.dark .adoc .sidebarblock > .content > .title,
 .dark .adoc h4,
 .dark .adoc h5,
 .dark .adoc h6 {
-  color:var(--text-orange)
+  color: var(--text-orange);
 }
 
 .dark .adoc h1 small,
 .dark .adoc h2 small,
 .dark .adoc h3 small,
 .dark .adoc #toctitle small,
-.dark .adoc .sidebarblock>.content>.title small,
+.dark .adoc .sidebarblock > .content > .title small,
 .dark .adoc h4 small,
 .dark .adoc h5 small,
 .dark .adoc h6 small {
-    color: var(--text-secondary);
+  color: var(--text-secondary);
 }
 
 .dark .adoc code {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc blockquote,
 .dark .adoc blockquote p {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc table {
-    background: var(--background-secondary);
-    border: 1px solid var(--border-secondary);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-secondary);
 }
 
 .dark .adoc table thead,
 .dark .adoc table tfoot {
-    background: var(--background-primary);
+  background: var(--background-primary);
 }
 
 .dark .adoc table thead tr th,
 .dark .adoc table thead tr td,
 .dark .adoc table tfoot tr th,
 .dark .adoc table tfoot tr td {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc table tr th,
 .dark .adoc table tr td {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc table tr.even,
 .dark .adoc table tr.alt {
-    background: var(--background-primary);
+  background: var(--background-primary);
 }
 
 .dark .adoc pre {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .dark .adoc .keyseq {
-    color: var(--text-secondary);
+  color: var(--text-secondary);
 }
 
 .dark .adoc kbd {
-    color: var(--text-primary);
-    box-shadow: none;
-    background: var(--background-primary);
-    border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  box-shadow: none;
+  background: var(--background-primary);
+  border: 1px solid var(--border-primary);
 }
 
 .dark .adoc .menuseq,
 .dark .adoc .menuref {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
-.dark .adoc p a>code:hover {
-    color: var(--text-primary);
+.dark .adoc p a > code:hover {
+  color: var(--text-primary);
 }
 
-.dark .adoc #header>h1:first-child {
-    color: var(--text-orange);
+.dark .adoc #header > h1:first-child {
+  color: var(--text-orange);
 }
 
-.dark .adoc #header>h1:only-child,
-.dark .adoc body.toc2 #header>h1:nth-last-child(2) {
-    border-bottom: 1px solid var(--border-primary);    
+.dark .adoc #header > h1:only-child,
+.dark .adoc body.toc2 #header > h1:nth-last-child(2) {
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .dark .adoc #header .details {
-    border-bottom: 1px solid var(--border-primary);
-    color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-primary);
+  color: var(--text-secondary);
 }
 
 .dark .adoc #header .details span.email a {
-    color: var(--text-primary);
+  color: var(--text-primary);
 }
 
-.dark .adoc #header .details br+span.author::before {
-    color: var(--text-primary);
+.dark .adoc #header .details br + span.author::before {
+  color: var(--text-primary);
 }
 
-.dark .adoc #content>h1:first-child:not([class]) {
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border-primary);    
+.dark .adoc #content > h1:first-child:not([class]) {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .dark .adoc #toctitle {
-    color: var(--text-red);
+  color: var(--text-red);
 }
 
 .dark .adoc .sidebarblock {
-    border: 1px solid var(--border-primary);    
-    background: var(--background-primary);   
+  border: 1px solid var(--border-primary);
+  background: var(--background-primary);
 }
 
 .dark .adoc .literalblock pre,
-.dark .adoc .listingblock>.content>pre:not(.highlight),
-.dark .adoc .listingblock>.content>pre[class="highlight"],
-.dark .adoc .listingblock>.content>pre[class^="highlight "] {
-    background: var(--background-secondary);
+.dark .adoc .listingblock > .content > pre:not(.highlight),
+.dark .adoc .listingblock > .content > pre[class="highlight"],
+.dark .adoc .listingblock > .content > pre[class^="highlight "] {
+  background: var(--background-secondary);
 }
 
 .dark .adoc .prettyprint {
-    background: var(--background-secondary);
+  background: var(--background-secondary);
 }
 
-.dark .adoc table.stripes-all>*>tr,
-.dark .adoc table.stripes-odd>*>tr:nth-of-type(odd),
-.dark .adoc table.stripes-even>*>tr:nth-of-type(even),
-.dark .adoc table.stripes-hover>*>tr:hover {
-    background: var(--background-secondary);
+.dark .adoc table.stripes-all > * > tr,
+.dark .adoc table.stripes-odd > * > tr:nth-of-type(odd),
+.dark .adoc table.stripes-even > * > tr:nth-of-type(even),
+.dark .adoc table.stripes-hover > * > tr:hover {
+  background: var(--background-secondary);
 }
 
 .dark .adoc tbody tr th {
-    background: var(--background-primary);
+  background: var(--background-primary);
 }
 
 .dark .adoc #content #toc {
-    background: var(--background-primary);
-    border: 1px solid var(--border-primary);
+  background: var(--background-primary);
+  border: 1px solid var(--border-primary);
 }
 
 .dark .adoc #footer {
-    background: var(--background-tertiary);
+  background: var(--background-tertiary);
 }
 
-.dark .adoc :not(pre):not([class^="L"])>code {
-    background: var(--background-primary);
+.dark .adoc :not(pre):not([class^="L"]) > code {
+  background: var(--background-secondary);
 }
 
-.dark .adoc #toc {    
-    background: var(--background-secondary);       
+.dark .adoc #toc {
+  background: var(--background-secondary);
 }
 
 @media screen and (min-width: 1200px) {
-    .dark .adoc #toc{
-        border-left: 1px solid var(--border-primary);
-        background: var(--background-primary);  
-    }
+  .dark .adoc #toc {
+    border-left: 1px solid var(--border-primary);
+    background: var(--background-primary);
+  }
 }

@@ -12,7 +12,7 @@ this artical introduces what is FOUC, and how to solve it.
 I am sure you have seen web pages load with *unstyled content*, and then it might be a few seconds (or minutes) before you see what may or may not be the page’s intended look and feel.In web design, this aberration is called the unintended Flash of Unstyled Content (FOUC).
 
 .Figure1
-image:/images/w.gif[example1] 
+image:w.gif[example1] 
 
 == How to avoid FOUC
 
@@ -21,7 +21,7 @@ image:/images/w.gif[example1]
 Hiding all or part of the web page until all styles and JavaScript are finished by applying a class name “js” as the selector that hides all content within a container that has an id=”fouc”. The “fouc” element is unhidden using a JavaScript getElementById function setting the display value to “block” level.
 
 .Example
-image:/images/w2.gif[example]
+image:w2.gif[example]
 
 === Second technique
 
