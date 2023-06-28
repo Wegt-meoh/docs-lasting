@@ -1,11 +1,11 @@
-import { getAllBooksList } from "@/lib/posts";
+import { getAllDocsLinkData } from "@/lib/posts";
 import { BooklistDataType } from "@/types/booklist";
 import BookBlock from "@/ui/BookBlock";
 import SearchButton from "@/ui/SearchButton";
 import Link from "next/link";
 
 export default async function Page() {
-  const booklistData: BooklistDataType[] = getAllBooksList();
+  const booklistData: BooklistDataType[] = getAllDocsLinkData();
 
   return (
     <div>

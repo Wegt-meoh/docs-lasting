@@ -9,7 +9,7 @@ Up to this point, you’ve been working with single container apps. But, now you
 * Running multiple processes will require a process manager (the container only starts one process), which adds complexity to container startup/shutdown.
 And there are more reasons. So, like the following diagram, it’s best to run your app in multiple containers.
 
-image::/images/docker/multi-app-architecture.png[multi app architecture]
+image::multi-app-architecture.png[multi app architecture]
 
 == Container networking
 

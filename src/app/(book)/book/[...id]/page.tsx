@@ -1,9 +1,8 @@
-import { getAllBooksList, getBookContentById } from "@/lib/posts";
-
-export const dynamicParams = false;
+import { getAllDocsLinkData, getDocsRawHtmlById } from "@/lib/posts";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
-  const booklistData = getAllBooksList();
+  const booklistData = getAllDocsLinkData();
 
   return booklistData.map((data) => {
     return { id: data.id.split("/").slice(1) };
@@ -12,7 +11,7 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: { id: string[] } }) {
   const id = params.id.join("/");
-  const content = getBookContentById(id);
-  if (!content) return null;
-  return <div dangerouslySetInnerHTML={{ __html: content }} />;
+  const rawHtml = getDocsRawHtmlById(id);
+  if (typeof rawHtml !== "string") notFound();
+  return <div dangerouslySetInnerHTML={{ __html: rawHtml }} />;
 }
