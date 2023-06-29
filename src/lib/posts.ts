@@ -1,12 +1,24 @@
-import asciidoctor, { AbstractBlock, Extensions } from "asciidoctor";
-import { readdirSync, statSync } from "fs";
+import asciidoctor from "asciidoctor";
+import { cpSync, readdirSync, statSync } from "fs";
 import path from "path";
 import * as cheerio from "cheerio";
 import hljs from "highlight.js";
-import { imageTreeProcessor } from "./image-tree-processor";
+import kroki from "asciidoctor-kroki";
+
+const postsDirectory = path.join(process.cwd(), "/public/docs");
+const docsSource = process.env.DOCS_ABSOLUTE_PATH;
+if (!docsSource) {
+  throw new Error("DOCS_ABSOLUTE_PATH can not be null");
+}
+
+readdirSync(docsSource).forEach((filePath) => {
+  cpSync(path.join(docsSource, filePath), path.join(postsDirectory, filePath), {
+    recursive: true,
+  });
+});
 
 const asciiDoctor = asciidoctor();
-const postsDirectory = path.join(process.cwd(), "/public/docs");
+kroki.register(asciiDoctor.Extensions);
 
 export function getAllDocsFilePath() {
   const fileNameList: string[] = [];

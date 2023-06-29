@@ -36,5 +36,5 @@ yarn-error.log*
 next-env.d.ts
 
 # docs-lasting
-/docs/**/*.html
+public/docs
 .pnpm-store
