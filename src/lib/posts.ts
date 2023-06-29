@@ -5,17 +5,7 @@ import * as cheerio from "cheerio";
 import hljs from "highlight.js";
 import kroki from "asciidoctor-kroki";
 
-const postsDirectory = path.join(process.cwd(), "/public/docs");
-const docsSource = process.env.DOCS_ABSOLUTE_PATH;
-if (!docsSource) {
-  throw new Error("DOCS_ABSOLUTE_PATH can not be null");
-}
-
-readdirSync(docsSource).forEach((filePath) => {
-  cpSync(path.join(docsSource, filePath), path.join(postsDirectory, filePath), {
-    recursive: true,
-  });
-});
+const docsDirectory = path.join(process.cwd(), "/public/docs");
 
 const asciiDoctor = asciidoctor();
 kroki.register(asciiDoctor.Extensions);
@@ -43,7 +33,7 @@ export function getAllDocsFilePath() {
       });
   };
 
-  readDirFile(postsDirectory);
+  readDirFile(docsDirectory);
   return fileNameList;
 }
 
@@ -51,7 +41,7 @@ export function getAllDocsLinkData() {
   return getAllDocsFilePath().map((filePath) => {
     const id = filePath
       .replace(new RegExp(`.adoc$`), "")
-      .replace(new RegExp(`^${postsDirectory}`), "");
+      .replace(new RegExp(`^${docsDirectory}`), "");
     const doc = asciiDoctor.loadFile(filePath);
     return {
       id,
@@ -68,7 +58,7 @@ export function getAllDocsLinkData() {
 }
 
 export function getDocRawHtmlById(id: string) {
-  const fullPath = path.join(postsDirectory, id) + ".adoc";
+  const fullPath = path.join(docsDirectory, id) + ".adoc";
   const doc = asciiDoctor.loadFile(fullPath, { standalone: true });
   doc.setAttribute("imagesdir", `/docs/${path.dirname(id)}`);
   const $ = cheerio.load(doc.convert());
